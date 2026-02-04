@@ -1,21 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Campus Mitra - Your All-in-One Platform for Student Life</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
     <style>
         :root {
-            --teal-gradient-start: #7DD3C0;
-            --teal-gradient-end: #5DAFBE;
-            --card-bg: #f8f8f8;
-            --text-dark: #1a1a1a;
-            --text-muted: #666;
-            --sage-green: #7FA896;
-            --sage-green-dark: #6B9480;
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+            /* Modern SaaS Color Palette */
+            --primary-dark: #1a1f36;
+            --primary-blue: #2563eb;
+            --primary-purple: #6366f1;
+            --accent-cyan: #06b6d4;
+            --accent-pink: #ec4899;
+
+            /* Backgrounds */
+            --bg-light: #f8fafc;
+            --bg-white: #ffffff;
+            --bg-gradient-start: #f1f5f9;
+            --bg-gradient-end: #e0e7ff;
+
+            /* Text Colors */
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+            /* Card Gradients */
+            --gradient-purple: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-blue: linear-gradient(135deg, #2563eb 0%, #3b82f6 100%);
+            --gradient-cyan: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%);
+            --gradient-pink: linear-gradient(135deg, #ec4899 0%, #db2777 100%);
         }
 
         * {
@@ -26,26 +50,71 @@
 
         body {
             font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, var(--teal-gradient-start) 0%, var(--teal-gradient-end) 100%);
+            background: linear-gradient(135deg, var(--bg-gradient-start) 0%, var(--bg-gradient-end) 100%);
             min-height: 100vh;
-            padding: 20px;
-            animation: gradientShift 15s ease infinite;
+            padding: 0;
+            position: relative;
+            overflow-x: hidden;
         }
 
-        @keyframes gradientShift {
-            0%, 100% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(5deg); }
+        /* Animated Background Shapes */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50%;
+            right: -10%;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(99, 102, 241, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+            z-index: 0;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: -30%;
+            left: -10%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(6, 182, 212, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 15s ease-in-out infinite reverse;
+            z-index: 0;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) translateX(0);
+            }
+
+            50% {
+                transform: translateY(-20px) translateX(10px);
+            }
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
             animation: fadeIn 0.6s ease-out;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Header */
@@ -53,13 +122,21 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 60px;
+            padding: 30px 0;
+            margin-bottom: 40px;
             animation: slideDown 0.8s ease-out;
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .brand-section {
@@ -69,20 +146,25 @@
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: var(--shadow-soft);
-            transition: transform 0.3s ease;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
             background: white;
             display: flex;
             align-items: center;
             justify-content: center;
+            border: 3px solid transparent;
+            background-image: linear-gradient(white, white), var(--gradient-purple);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
         }
 
         .logo:hover {
-            transform: rotate(5deg) scale(1.05);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-xl);
         }
 
         .logo img {
@@ -93,31 +175,31 @@
 
         .brand h1 {
             font-family: 'DM Serif Display', serif;
-            font-size: 2.8rem;
-            color: var(--text-dark);
+            font-size: 2.5rem;
+            color: var(--text-primary);
             margin-bottom: 5px;
             letter-spacing: -0.5px;
+            font-weight: 700;
         }
 
         .brand p {
-            color: var(--text-dark);
-            font-size: 1.1rem;
-            font-weight: 400;
-            opacity: 0.8;
+            color: var(--text-secondary);
+            font-size: 1rem;
+            font-weight: 500;
         }
 
         .login-btn {
-            background: white;
-            padding: 12px 30px;
-            border-radius: 25px;
+            background: var(--gradient-blue);
+            padding: 12px 28px;
+            border-radius: 12px;
             border: none;
             cursor: pointer;
             display: flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: var(--shadow-soft);
-            font-size: 1rem;
-            color: var(--text-dark);
+            gap: 8px;
+            box-shadow: var(--shadow-md);
+            font-size: 0.95rem;
+            color: white;
             font-weight: 600;
             font-family: 'Outfit', sans-serif;
             transition: all 0.3s ease;
@@ -125,69 +207,132 @@
 
         .login-btn:hover {
             transform: translateY(-2px);
-            box-shadow: var(--shadow-hover);
+            box-shadow: var(--shadow-xl);
         }
 
         .user-icon {
-            width: 20px;
-            height: 20px;
+            width: 18px;
+            height: 18px;
         }
 
         /* Module Cards Grid */
         .modules-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 30px;
-            margin-bottom: 80px;
+            gap: 24px;
+            margin-bottom: 60px;
             animation: fadeInUp 0.8s ease-out 0.3s both;
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .module-card {
-            background: white;
+            background: var(--bg-white);
             border-radius: 20px;
-            padding: 40px;
-            box-shadow: var(--shadow-soft);
+            padding: 32px;
+            box-shadow: var(--shadow-md);
             display: flex;
             align-items: center;
-            gap: 25px;
-            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            gap: 24px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
             text-decoration: none;
             color: inherit;
             animation: popIn 0.5s ease-out both;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            position: relative;
+            overflow: hidden;
         }
 
-        .module-card:nth-child(1) { animation-delay: 0.1s; }
-        .module-card:nth-child(2) { animation-delay: 0.15s; }
-        .module-card:nth-child(3) { animation-delay: 0.2s; }
-        .module-card:nth-child(4) { animation-delay: 0.25s; }
+        .module-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.05) 0%, rgba(6, 182, 212, 0.05) 100%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 0;
+        }
+
+        .module-card:hover::before {
+            opacity: 1;
+        }
+
+        .module-card:nth-child(1) {
+            animation-delay: 0.1s;
+        }
+
+        .module-card:nth-child(2) {
+            animation-delay: 0.15s;
+        }
+
+        .module-card:nth-child(3) {
+            animation-delay: 0.2s;
+        }
+
+        .module-card:nth-child(4) {
+            animation-delay: 0.25s;
+        }
 
         @keyframes popIn {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .module-card:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
         }
 
         .module-icon {
-            width: 100px;
-            height: 100px;
+            width: 80px;
+            height: 80px;
             border-radius: 16px;
-            background: linear-gradient(135deg, #7FA896 0%, #6B9480 100%);
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
-            transition: transform 0.3s ease;
+            transition: all 0.3s ease;
             overflow: hidden;
+            position: relative;
+            z-index: 1;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .module-card:nth-child(1) .module-icon {
+            background: var(--gradient-purple);
+        }
+
+        .module-card:nth-child(2) .module-icon {
+            background: var(--gradient-cyan);
+        }
+
+        .module-card:nth-child(3) .module-icon {
+            background: var(--gradient-blue);
+        }
+
+        .module-card:nth-child(4) .module-icon {
+            background: var(--gradient-pink);
         }
 
         .module-icon img {
@@ -197,72 +342,79 @@
         }
 
         .module-card:hover .module-icon {
-            transform: scale(1.1) rotate(5deg);
+            transform: scale(1.1) rotate(3deg);
         }
 
         .module-content {
             flex: 1;
+            position: relative;
+            z-index: 1;
         }
 
         .module-title {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 10px;
+            color: var(--text-primary);
+            margin-bottom: 8px;
             font-family: 'DM Serif Display', serif;
+            letter-spacing: -0.3px;
         }
 
         .module-description {
-            font-size: 1.05rem;
-            color: var(--text-muted);
-            line-height: 1.5;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            font-weight: 400;
         }
 
         /* Call to Action Section */
         .cta-section {
             text-align: center;
             margin-bottom: 60px;
+            padding: 60px 40px;
+            background: var(--bg-white);
+            border-radius: 24px;
+            box-shadow: var(--shadow-lg);
             animation: fadeInUp 0.8s ease-out 0.5s both;
         }
 
         .cta-text {
-            font-size: 1.3rem;
-            color: var(--text-dark);
-            margin-bottom: 30px;
-            line-height: 1.6;
-            max-width: 800px;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+            line-height: 1.7;
+            max-width: 700px;
             margin-left: auto;
             margin-right: auto;
         }
 
         .get-started-btn {
-            background: var(--sage-green);
+            background: var(--gradient-purple);
             color: white;
             border: none;
-            padding: 18px 50px;
-            border-radius: 30px;
-            font-size: 1.2rem;
+            padding: 16px 48px;
+            border-radius: 12px;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            box-shadow: var(--shadow-soft);
+            box-shadow: var(--shadow-lg);
             transition: all 0.3s ease;
             font-family: 'Outfit', sans-serif;
         }
 
         .get-started-btn:hover {
-            background: var(--sage-green-dark);
             transform: translateY(-3px);
-            box-shadow: var(--shadow-hover);
+            box-shadow: var(--shadow-2xl);
         }
 
         /* Footer */
         footer {
             text-align: center;
-            padding: 30px 0;
-            color: var(--text-dark);
-            font-size: 0.95rem;
-            opacity: 0.8;
+            padding: 40px 0;
+            color: var(--text-muted);
+            font-size: 0.9rem;
             animation: fadeIn 0.8s ease-out 0.7s both;
+            border-top: 1px solid rgba(0, 0, 0, 0.05);
         }
 
         /* Responsive */
@@ -311,8 +463,407 @@
                 font-size: 1.1rem;
             }
         }
+
+        /* Chatbot Styles */
+        .chatbot-container {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+        }
+
+        .chatbot-button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: var(--gradient-purple);
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite;
+            position: relative;
+        }
+
+        .chatbot-button::before {
+            content: '';
+            position: absolute;
+            top: -3px;
+            left: -3px;
+            right: -3px;
+            bottom: -3px;
+            border-radius: 50%;
+            background: var(--gradient-purple);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: -1;
+            filter: blur(8px);
+        }
+
+        .chatbot-button:hover::before {
+            opacity: 0.6;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                box-shadow: 0 4px 20px rgba(99, 102, 241, 0.4);
+            }
+
+            50% {
+                box-shadow: 0 4px 30px rgba(99, 102, 241, 0.6);
+            }
+        }
+
+        .chatbot-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 30px rgba(99, 102, 241, 0.6);
+        }
+
+        .chatbot-button svg {
+            width: 30px;
+            height: 30px;
+            fill: white;
+        }
+
+        .chat-window {
+            position: absolute;
+            bottom: 80px;
+            right: 0;
+            width: 380px;
+            height: 550px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        .chat-window.active {
+            display: flex;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .chat-header {
+            background: var(--gradient-purple);
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chat-header::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: shimmer 3s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                transform: translateX(-100%) translateY(-100%) rotate(45deg);
+            }
+
+            100% {
+                transform: translateX(100%) translateY(100%) rotate(45deg);
+            }
+        }
+
+        .chat-header-content {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .chat-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+            animation: avatarPulse 2s ease-in-out infinite;
+        }
+
+        @keyframes avatarPulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .chat-avatar svg {
+            width: 24px;
+            height: 24px;
+            fill: var(--sage-green);
+        }
+
+        .chat-header-text h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .chat-header-text p {
+            margin: 0;
+            font-size: 0.85rem;
+            opacity: 0.9;
+        }
+
+        .close-chat {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .close-chat:hover {
+            transform: rotate(90deg);
+        }
+
+        .close-chat svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+        }
+
+        .chat-messages::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .chat-messages::-webkit-scrollbar-thumb {
+            background: var(--sage-green);
+            border-radius: 3px;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            display: flex;
+            gap: 10px;
+            animation: messageSlide 0.3s ease-out;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--sage-green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .message.user .message-avatar {
+            background: var(--teal-gradient-start);
+        }
+
+        .message-avatar svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        .message-content {
+            max-width: 70%;
+            padding: 12px 16px;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            word-wrap: break-word;
+        }
+
+        .message.user .message-content {
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--sage-green-dark) 100%);
+            color: white;
+        }
+
+        .message-content p {
+            margin: 0;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        .typing-indicator {
+            display: none;
+            padding: 12px 16px;
+            background: white;
+            border-radius: 15px;
+            width: fit-content;
+        }
+
+        .typing-indicator.active {
+            display: block;
+        }
+
+        .typing-dots {
+            display: flex;
+            gap: 4px;
+        }
+
+        .typing-dots span {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--sage-green);
+            animation: typingBounce 1.4s infinite;
+        }
+
+        .typing-dots span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+
+        .typing-dots span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+
+        @keyframes typingBounce {
+
+            0%,
+            60%,
+            100% {
+                transform: translateY(0);
+            }
+
+            30% {
+                transform: translateY(-10px);
+            }
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e9ecef;
+        }
+
+        .chat-input-wrapper {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #e9ecef;
+            border-radius: 25px;
+            font-size: 0.95rem;
+            font-family: 'Outfit', sans-serif;
+            transition: border-color 0.3s ease;
+            outline: none;
+        }
+
+        .chat-input:focus {
+            border-color: var(--sage-green);
+        }
+
+        .send-button {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--sage-green) 0%, var(--sage-green-dark) 100%);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .send-button:hover:not(:disabled) {
+            transform: scale(1.1);
+            box-shadow: 0 4px 15px rgba(127, 168, 150, 0.4);
+        }
+
+        .send-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .send-button svg {
+            width: 20px;
+            height: 20px;
+            fill: white;
+        }
+
+        @media (max-width: 640px) {
+            .chat-window {
+                width: calc(100vw - 40px);
+                height: calc(100vh - 120px);
+                bottom: 80px;
+                right: 20px;
+            }
+
+            .chatbot-container {
+                bottom: 20px;
+                right: 20px;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <!-- Header -->
@@ -328,7 +879,8 @@
             </div>
             <button class="login-btn">
                 <svg class="user-icon" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                        clip-rule="evenodd" />
                 </svg>
                 Log In
             </button>
@@ -395,5 +947,253 @@
             © 2024 Campus Mitra | Designed for students, by students.
         </footer>
     </div>
+
+    <!-- Chatbot -->
+    <div class="chatbot-container">
+        <button class="chatbot-button" id="chatbotToggle" aria-label="Open chat">
+            <svg viewBox="0 0 24 24">
+                <path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z" />
+                <path d="M7 9h2v2H7zm4 0h2v2h-2zm4 0h2v2h-2z" />
+            </svg>
+        </button>
+
+        <div class="chat-window" id="chatWindow">
+            <div class="chat-header">
+                <div class="chat-header-content">
+                    <div class="chat-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                        </svg>
+                    </div>
+                    <div class="chat-header-text">
+                        <h3>Campus Mitra Assistant</h3>
+                        <p>🟢 Online • Here to help students</p>
+                    </div>
+                </div>
+                <button class="close-chat" id="closeChat" aria-label="Close chat">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="chat-messages" id="chatMessages">
+                <div class="message bot">
+                    <div class="message-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                        </svg>
+                    </div>
+                    <div class="message-content">
+                        <p>👋 Welcome to Campus Mitra! I'm your AI assistant, here to help you navigate our platform and
+                            answer any questions about our student services.</p>
+                    </div>
+                </div>
+                <div class="message bot">
+                    <div class="message-avatar">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z" />
+                        </svg>
+                    </div>
+                    <div class="message-content">
+                        <p>💡 Ask me about:<br>📚 <strong>BookLoop</strong> - Buy & sell books<br>🗂️
+                            <strong>StudyVault</strong> - Academic resources<br>📅 <strong>AcadTrack</strong> -
+                            Assignment tracking<br>💰 <strong>SpendSmart</strong> - Budget management
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="chat-input-container">
+                <div class="chat-input-wrapper">
+                    <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..."
+                        autocomplete="off">
+                    <button class="send-button" id="sendButton" aria-label="Send message">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Gemini API Configuration
+        const GEMINI_API_KEY = 'AIzaSyCxX1uEPTy82mzlapDffV1xisCkc3_35Qw';
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+
+        // DOM Elements
+        const chatbotToggle = document.getElementById('chatbotToggle');
+        const chatWindow = document.getElementById('chatWindow');
+        const closeChat = document.getElementById('closeChat');
+        const chatMessages = document.getElementById('chatMessages');
+        const chatInput = document.getElementById('chatInput');
+        const sendButton = document.getElementById('sendButton');
+
+        // Toggle chat window
+        chatbotToggle.addEventListener('click', () => {
+            chatWindow.classList.add('active');
+            chatInput.focus();
+        });
+
+        closeChat.addEventListener('click', () => {
+            chatWindow.classList.remove('active');
+        });
+
+        // Send message on button click
+        sendButton.addEventListener('click', sendMessage);
+
+        // Send message on Enter key
+        chatInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                sendMessage();
+            }
+        });
+
+        async function sendMessage() {
+            const message = chatInput.value.trim();
+
+            if (!message) return;
+
+            // Add user message to chat
+            addMessage(message, 'user');
+            chatInput.value = '';
+
+            // Disable input while processing
+            chatInput.disabled = true;
+            sendButton.disabled = true;
+
+            // Show typing indicator
+            showTypingIndicator();
+
+            try {
+                // Call Gemini API
+                const response = await fetch(GEMINI_API_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: `You are the Campus Mitra AI Assistant, a friendly and knowledgeable helper for students using the Campus Mitra platform. Campus Mitra is an all-in-one student life platform with four main modules:
+
+1. BookLoop - A marketplace for students to buy and sell academic books and notes easily
+2. StudyVault - A resource hub to find, save, and share academic materials effortlessly  
+3. AcadTrack - An academic tracker to manage assignments, exams, and semester schedules seamlessly
+4. SpendSmart - A budget management tool to help students track expenses and manage their finances smartly
+
+Be helpful, concise, and encouraging. Use emojis occasionally to be friendly. If asked about features, provide specific details about how each module helps students. Keep responses under 3-4 sentences unless more detail is requested.
+
+User question: ${message}`
+                            }]
+                        }]
+                    })
+                });
+
+                // Check if response is ok
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    console.error('API Error Response:', errorData);
+                    throw new Error(errorData.error?.message || response.statusText);
+                }
+
+                const data = await response.json();
+                console.log('API Response:', data);
+
+                // Hide typing indicator
+                hideTypingIndicator();
+
+                if (data.candidates && data.candidates[0]?.content?.parts?.[0]?.text) {
+                    const botResponse = data.candidates[0].content.parts[0].text;
+                    addMessage(botResponse, 'bot');
+                } else if (data.error) {
+                    console.error('API returned error:', data.error);
+                    addMessage(`⚠️ API Error: ${data.error.message || 'Unknown error'}`, 'bot');
+                } else {
+                    console.error('Unexpected response format:', data);
+                    addMessage('🤔 Sorry, I received an unexpected response. Please try again.', 'bot');
+                }
+            } catch (error) {
+                console.error('Error calling Gemini API:', error);
+                hideTypingIndicator();
+
+                let errorMessage = '❌ ';
+                if (error.message.includes('Failed to fetch') || error.message.includes('NetworkError')) {
+                    errorMessage += 'Network error. Please check your internet connection.';
+                } else if (error.message.includes('API_KEY_INVALID')) {
+                    errorMessage += 'Invalid API key. Please check your Gemini API key.';
+                } else if (error.message) {
+                    errorMessage += error.message;
+                } else {
+                    errorMessage += 'Something went wrong. Please try again.';
+                }
+
+                addMessage(errorMessage, 'bot');
+            }
+
+            // Re-enable input
+            chatInput.disabled = false;
+            sendButton.disabled = false;
+            chatInput.focus();
+        }
+
+        function addMessage(text, sender) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender}`;
+
+            messageDiv.innerHTML = `
+                <div class="message-avatar">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </div>
+                <div class="message-content">
+                    <p>${text}</p>
+                </div>
+            `;
+
+            chatMessages.appendChild(messageDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const typingDiv = document.createElement('div');
+            typingDiv.className = 'message bot';
+            typingDiv.id = 'typingIndicator';
+
+            typingDiv.innerHTML = `
+                <div class="message-avatar">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                    </svg>
+                </div>
+                <div class="typing-indicator active">
+                    <div class="typing-dots">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            `;
+
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        function hideTypingIndicator() {
+            const typingIndicator = document.getElementById('typingIndicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+        }
+    </script>
 </body>
+
 </html>
