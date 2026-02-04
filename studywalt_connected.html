@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>StudyVault - Find, Save & Share Academic Resources</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Supabase Library -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <style>
+        :root {
+            --teal-gradient-start: #7DD3C0;
+            --teal-gradient-end: #5DAFBE;
+            --card-bg: #f8f8f8;
+            --text-dark: #1a1a1a;
+            --text-muted: #666;
+            --blue-primary: #4A7BA7;
+            --red-pdf: #D45B5B;
+            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: linear-gradient(135deg, var(--teal-gradient-start) 0%, var(--teal-gradient-end) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            animation: gradientShift 15s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0%, 100% { filter: hue-rotate(0deg); }
+            50% { filter: hue-rotate(5deg); }
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Header */
+        header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .brand-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: var(--shadow-soft);
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: rotate(5deg) scale(1.05);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .brand {
+            flex: 1;
+        }
+
+        .brand h1 {
+            font-family: 'DM Serif Display', serif;
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
+        }
+
+        .brand p {
+            color: var(--text-dark);
+            font-size: 1rem;
+            font-weight: 400;
+            opacity: 0.8;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .upload-btn {
+            background: linear-gradient(135deg, #8FD14F 0%, #7AB839 100%);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            color: white;
+            font-size: 0.95rem;
+            font-weight: 600;
+            font-family: 'Outfit', sans-serif;
+            text-decoration: none;
+        }
+
+        .upload-btn:hover {
+            transform: translateY(-2px) scale(1.05);
+            box-shadow: 0 6px 20px rgba(143, 209, 79, 0.4);
+        }
+
+        .upload-icon {
+            width: 20px;
+            height: 20px;
+        }
+
+        .campus-badge {
+            background: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: var(--shadow-soft);
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            font-weight: 500;
+        }
+
+        .campus-icon {
+            width: 20px;
+            height: 20px;
+            opacity: 0.6;
+        }
+
+        /* Search Bar */
+        .search-container {
+            margin-bottom: 30px;
+            animation: slideUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 12px;
+            padding: 0 10px 0 25px;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+        }
+
+        .search-bar:focus-within {
+            box-shadow: var(--shadow-hover);
+            transform: translateY(-2px);
+        }
+
+        .search-icon {
+            width: 24px;
+            height: 24px;
+            color: var(--text-muted);
+            margin-right: 10px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            padding: 18px 10px;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            outline: none;
+            background: transparent;
+        }
+
+        .search-btn {
+            background: linear-gradient(135deg, var(--blue-primary) 0%, #3D668E 100%);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 30px;
+            animation: fadeInUp 0.8s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Sidebar Filters */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .filter-section {
+            background: white;
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .filter-section h3 {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #E0E0E0;
+            border-radius: 10px;
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--blue-primary);
+        }
+
+        /* Resources Grid */
+        .resources-section {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--shadow-soft);
+            display: flex;
+            gap: 15px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .resource-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .resource-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .icon-pdf {
+            background: linear-gradient(135deg, #FF6B6B 0%, #D45B5B 100%);
+            color: white;
+        }
+
+        .icon-link {
+            background: linear-gradient(135deg, #4A7BA7 0%, #3D668E 100%);
+            color: white;
+        }
+
+        .icon-video {
+            background: linear-gradient(135deg, #8FD14F 0%, #7AB839 100%);
+            color: white;
+        }
+
+        .resource-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .resource-content {
+            flex: 1;
+        }
+
+        .resource-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 10px;
+        }
+
+        .resource-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+
+        .resource-uploader {
+            color: var(--text-muted);
+        }
+
+        .resource-uploader strong {
+            color: var(--text-dark);
+        }
+
+        .resource-votes {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            color: var(--blue-primary);
+            font-weight: 600;
+        }
+
+        .vote-icon {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Loading & Empty States */
+        .loading-state,
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            grid-column: 1 / -1;
+        }
+
+        .loading-state {
+            font-size: 1.2rem;
+            color: var(--text-dark);
+        }
+
+        .empty-state {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+        }
+
+        /* Responsive */
+        @media (max-width: 968px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .sidebar {
+                order: 2;
+            }
+
+            header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .header-right {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .brand h1 {
+                font-size: 2rem;
+            }
+
+            .resources-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="brand-section">
+                <div class="logo">
+                    <img src="study_walt logo.JPG" alt="StudyVault Logo">
+                </div>
+                <div class="brand">
+                    <h1>StudyVault</h1>
+                    <p>Find, save & share academic resources</p>
+                </div>
+            </div>
+            <div class="header-right">
+                <a href="upload_resource_connected.html" class="upload-btn">
+                    <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                    </svg>
+                    Upload Resource
+                </a>
+                <div class="campus-badge">
+                    <svg class="campus-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                    </svg>
+                    Campus Mitra
+                </div>
+            </div>
+        </header>
+
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-bar">
+                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Search for resources, notes, PDFs...">
+                <button class="search-btn" onclick="searchResources()">
+                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
+                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/>
+                    </svg>
+                    Search
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Sidebar Filters -->
+            <aside class="sidebar">
+                <div class="filter-section">
+                    <h3>Subject:</h3>
+                    <select class="filter-select" id="subjectFilter" onchange="filterResources()">
+                        <option value="">All Subjects</option>
+                        <option value="Computer Science">Computer Science</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Biology">Biology</option>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Resource Type:</h3>
+                    <select class="filter-select" id="typeFilter" onchange="filterResources()">
+                        <option value="">All Types</option>
+                        <option value="PDF">PDF Documents</option>
+                        <option value="Link">External Links</option>
+                        <option value="Video">Video Links</option>
+                    </select>
+                </div>
+
+                <div class="filter-section">
+                    <h3>Sort by:</h3>
+                    <select class="filter-select" id="sortFilter" onchange="filterResources()">
+                        <option value="recent">Recently Added</option>
+                        <option value="likes">Most Upvoted</option>
+                        <option value="downloads">Most Downloaded</option>
+                    </select>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="resources-section">
+                <!-- Resources Grid -->
+                <div class="resources-grid" id="resourcesGrid">
+                    <div class="loading-state">Loading resources...</div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // SUPABASE SETUP - REPLACE WITH YOUR KEYS!
+        // ==========================================
+        const SUPABASE_URL = 'https://geqvoshwilllvjuepbfg.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlcXZvc2h3aWxsbHZqdWVwYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDc3MzUsImV4cCI6MjA4NTY4MzczNX0.AGYzSZYxViV8tuiPQCMmVU4LnfLRqlwY3eHoJ5lM4Ow'
+        
+        const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+
+        // ==========================================
+        // LOAD RESOURCES FROM SUPABASE
+        // ==========================================
+        async function loadResources() {
+            try {
+                const { data: resources, error } = await supabaseClient
+                    .from('resources')
+                    .select('*')
+                    .order('created_at', { ascending: false })
+
+                if (error) throw error
+
+                displayResources(resources)
+            } catch (error) {
+                console.error('Error loading resources:', error)
+                document.getElementById('resourcesGrid').innerHTML = `
+                    <div class="empty-state">
+                        <p>Error loading resources. Please check console.</p>
+                    </div>
+                `
+            }
+        }
+
+        // ==========================================
+        // DISPLAY RESOURCES
+        // ==========================================
+        function displayResources(resources) {
+            const grid = document.getElementById('resourcesGrid')
+            
+            if (resources.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <p>No resources found. Be the first to upload!</p>
+                    </div>
+                `
+                return
+            }
+
+            grid.innerHTML = resources.map(resource => {
+                // Determine icon type
+                let iconClass = 'icon-pdf'
+                let iconSVG = `
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                        <path d="M14 2v6h6"/>
+                        <path d="M9 13h6"/>
+                        <path d="M9 17h6"/>
+                    </svg>
+                `
+
+                if (resource.type === 'Link') {
+                    iconClass = 'icon-link'
+                    iconSVG = `
+                        <svg viewBox="0 0 24 24">
+                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+                        </svg>
+                    `
+                } else if (resource.type === 'Video') {
+                    iconClass = 'icon-video'
+                    iconSVG = `
+                        <svg viewBox="0 0 24 24">
+                            <polygon points="5 3 19 12 5 21 5 3"/>
+                        </svg>
+                    `
+                }
+
+                return `
+                    <div class="resource-card" onclick="window.open('${resource.file_url}', '_blank')">
+                        <div class="resource-icon ${iconClass}">
+                            ${iconSVG}
+                        </div>
+                        <div class="resource-content">
+                            <div class="resource-title">${resource.title}</div>
+                            <div class="resource-meta">
+                                <div class="resource-uploader">Uploaded by: <strong>${resource.uploaded_by}</strong></div>
+                                <div class="resource-votes">
+                                    <svg class="vote-icon" fill="currentColor" viewBox="0 0 20 20">
+                                        <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
+                                    </svg>
+                                    <span>${resource.likes} Upvotes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }).join('')
+        }
+
+        // ==========================================
+        // SEARCH RESOURCES
+        // ==========================================
+        async function searchResources() {
+            const query = document.getElementById('searchInput').value.trim()
+            
+            if (!query) {
+                loadResources()
+                return
+            }
+
+            try {
+                const { data, error } = await supabaseClient
+                    .from('resources')
+                    .select('*')
+                    .ilike('title', `%${query}%`)
+
+                if (error) throw error
+                displayResources(data)
+            } catch (error) {
+                console.error('Error:', error)
+            }
+        }
+
+        // ==========================================
+        // FILTER RESOURCES
+        // ==========================================
+        async function filterResources() {
+            const subject = document.getElementById('subjectFilter').value
+            const type = document.getElementById('typeFilter').value
+            const sort = document.getElementById('sortFilter').value
+
+            try {
+                let query = supabaseClient.from('resources').select('*')
+
+                if (subject) {
+                    query = query.eq('subject', subject)
+                }
+                if (type) {
+                    query = query.eq('type', type)
+                }
+
+                // Sorting
+                if (sort === 'recent') {
+                    query = query.order('created_at', { ascending: false })
+                } else if (sort === 'likes') {
+                    query = query.order('likes', { ascending: false })
+                } else if (sort === 'downloads') {
+                    query = query.order('downloads', { ascending: false })
+                }
+
+                const { data, error } = await query
+
+                if (error) throw error
+                displayResources(data)
+            } catch (error) {
+                console.error('Error:', error)
+            }
+        }
+
+        // ==========================================
+        // INITIALIZE
+        // ==========================================
+        window.addEventListener('DOMContentLoaded', loadResources)
+
+        // Search on Enter key
+        document.getElementById('searchInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') searchResources()
+        })
+    </script>
+</body>
+</html>
