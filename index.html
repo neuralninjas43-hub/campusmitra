@@ -861,10 +861,66 @@
                 right: 20px;
             }
         }
+
+        /* Welcome Toast Notification */
+        #welcomeToast {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-purple));
+            color: white;
+            padding: 16px 24px;
+            border-radius: 12px;
+            box-shadow: var(--shadow-2xl);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: slideInRight 0.5s ease-out, fadeOut 0.5s ease-out 3.5s forwards;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+                transform: translateX(400px);
+            }
+        }
+
+        #welcomeToast svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        #welcomeToast .toast-message {
+            font-weight: 500;
+            font-size: 1rem;
+        }
     </style>
 </head>
 
 <body>
+    <!-- Welcome Toast -->
+    <div id="welcomeToast">
+        <svg fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                clip-rule="evenodd" />
+        </svg>
+        <span class="toast-message" id="toastMessage"></span>
+    </div>
+
     <div class="container">
         <!-- Header -->
         <header>
@@ -877,13 +933,22 @@
                     <p>Your all-in-one platform for student life</p>
                 </div>
             </div>
-            <button class="login-btn">
-                <svg class="user-icon" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
-                        clip-rule="evenodd" />
-                </svg>
-                Log In
-            </button>
+            <a href="auth.html" id="loginBtnLink">
+                <button class="login-btn" id="loginBtn">
+                    <svg class="user-icon" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z"
+                            clip-rule="evenodd" />
+                    </svg>
+                    Log In
+                </button>
+            </a>
+            <div id="userSession" style="display: none; align-items: center; gap: 15px;">
+                <span id="userName" style="font-weight: 500; color: var(--text-primary);"></span>
+                <button class="login-btn" id="deleteAccountBtn"
+                    style="background: #fee2e2; color: #dc2626; border: 1px solid #fecaca;">Delete Account</button>
+                <button class="login-btn" id="logoutBtn"
+                    style="background: var(--bg-white); color: var(--text-primary); border: 1px solid #e2e8f0;">Logout</button>
+            </div>
         </header>
 
         <!-- Module Cards -->
@@ -1021,6 +1086,150 @@
             </div>
         </div>
     </div>
+
+    <script>
+        // Custom Session Management using LocalStorage
+        const SESSION_KEY = 'campus_mitra_session';
+
+        const loginBtnLink = document.getElementById('loginBtnLink');
+        const userSession = document.getElementById('userSession');
+        const userName = document.getElementById('userName');
+        const logoutBtn = document.getElementById('logoutBtn');
+        const welcomeToast = document.getElementById('welcomeToast');
+        const toastMessage = document.getElementById('toastMessage');
+
+        function checkSession() {
+            const sessionData = localStorage.getItem(SESSION_KEY);
+
+            if (sessionData) {
+                const user = JSON.parse(sessionData);
+
+                if (loginBtnLink && userSession) {
+                    loginBtnLink.style.display = 'none';
+                    userSession.style.display = 'flex';
+                }
+
+                // Display personalized greeting
+                if (userName) {
+                    const username = user.username || user.name || user.email.split('@')[0];
+                    userName.innerText = `Hi, ${username}!`;
+                }
+
+                // Show welcome toast on first load
+                if (welcomeToast && toastMessage && !sessionStorage.getItem('welcomeShown')) {
+                    const username = user.username || user.name || user.email.split('@')[0];
+                    toastMessage.innerText = `Welcome to Campus Mitra, ${username}!`;
+                    welcomeToast.style.display = 'flex';
+                    sessionStorage.setItem('welcomeShown', 'true');
+
+                    // Auto-hide after 4 seconds
+                    setTimeout(() => {
+                        welcomeToast.style.display = 'none';
+                    }, 4000);
+                }
+            } else {
+                if (loginBtnLink && userSession) {
+                    loginBtnLink.style.display = 'block';
+                    userSession.style.display = 'none';
+                }
+            }
+        }
+
+        if (logoutBtn) {
+            logoutBtn.onclick = () => {
+                localStorage.removeItem(SESSION_KEY);
+                sessionStorage.removeItem('welcomeShown');
+                checkSession();
+            };
+        }
+
+        // --- DELETE ACCOUNT FUNCTIONALITY ---
+        const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+        const deleteAccountModal = document.getElementById('deleteAccountModal');
+        const closeDeleteModal = document.getElementById('closeDeleteModal');
+        const deletePassword = document.getElementById('deletePassword');
+        const deleteConfirmText = document.getElementById('deleteConfirmText');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+
+        if (deleteAccountBtn && deleteAccountModal) {
+            deleteAccountBtn.onclick = () => {
+                deleteAccountModal.style.display = 'flex';
+            };
+
+            closeDeleteModal.onclick = () => {
+                deleteAccountModal.style.display = 'none';
+                deletePassword.value = '';
+                deleteConfirmText.value = '';
+            };
+
+            deleteAccountModal.onclick = (e) => {
+                if (e.target === deleteAccountModal) {
+                    deleteAccountModal.style.display = 'none';
+                    deletePassword.value = '';
+                    deleteConfirmText.value = '';
+                }
+            };
+
+            confirmDeleteBtn.onclick = () => {
+                const password = deletePassword.value.trim();
+                const confirmText = deleteConfirmText.value.trim();
+
+                if (!password) {
+                    alert('Please enter your password.');
+                    return;
+                }
+
+                if (confirmText !== 'DELETE') {
+                    alert('Please type "DELETE" to confirm account deletion.');
+                    return;
+                }
+
+                const sessionData = localStorage.getItem(SESSION_KEY);
+                if (!sessionData) {
+                    alert('No active session found.');
+                    return;
+                }
+
+                const currentUser = JSON.parse(sessionData);
+                const USERS_KEY = 'campus_mitra_users';
+                const users = JSON.parse(localStorage.getItem(USERS_KEY) || '[]');
+                const user = users.find(u => u.email === currentUser.email);
+
+                if (!user) {
+                    alert('User not found.');
+                    return;
+                }
+
+                if (currentUser.method === 'custom' && user.password !== password) {
+                    alert('Incorrect password.');
+                    return;
+                }
+
+                if (!confirm('Are you absolutely sure? This action cannot be undone!')) {
+                    return;
+                }
+
+                const updatedUsers = users.filter(u => u.email !== currentUser.email);
+                localStorage.setItem(USERS_KEY, JSON.stringify(updatedUsers));
+                localStorage.removeItem(SESSION_KEY);
+                sessionStorage.removeItem('welcomeShown');
+                deleteAccountModal.style.display = 'none';
+
+                alert('Your account has been successfully deleted. You will be redirected to the login page.');
+                window.location.href = 'auth.html';
+            };
+        }
+
+        // Initial check
+        checkSession();
+
+        // Listen for storage changes
+        window.addEventListener('storage', (e) => {
+            if (e.key === SESSION_KEY) {
+                checkSession();
+            }
+        });
+    </script>
 
     <script>
         // Gemini API Configuration
@@ -1194,6 +1403,51 @@ User question: ${message}`
             }
         }
     </script>
+
+    <!-- Delete Account Modal -->
+    <div class="modal-overlay" id="deleteAccountModal"
+        style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.5); z-index: 1000; align-items: center; justify-content: center;">
+        <div
+            style="background: white; padding: 40px; border-radius: 20px; max-width: 450px; width: 90%; box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1); position: relative;">
+            <button id="closeDeleteModal"
+                style="position: absolute; top: 20px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #64748b;">&times;</button>
+
+            <div style="text-align: center; margin-bottom: 24px;">
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#dc2626" stroke-width="2"
+                    style="margin: 0 auto 16px;">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <line x1="15" y1="9" x2="9" y2="15"></line>
+                    <line x1="9" y1="9" x2="15" y2="15"></line>
+                </svg>
+                <h2 style="color: #0f172a; margin-bottom: 8px;">Delete Account</h2>
+                <p style="color: #64748b; font-size: 0.9rem;">This action cannot be undone</p>
+            </div>
+
+            <div
+                style="background: #fee2e2; padding: 16px; border-radius: 12px; margin-bottom: 24px; border-left: 4px solid #dc2626;">
+                <p style="color: #991b1b; font-size: 0.9rem; margin: 0;"><strong>Warning:</strong> All your data will be
+                    permanently deleted including your profile, preferences, and activity history.</p>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #0f172a;">Confirm
+                        Password</label>
+                    <input type="password" id="deletePassword" placeholder="Enter your password"
+                        style="width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #e2e8f0; font-family: inherit;">
+                </div>
+                <div style="margin-bottom: 20px;">
+                    <label style="display: block; margin-bottom: 8px; font-weight: 500; color: #0f172a;">Type "DELETE"
+                        to confirm</label>
+                    <input type="text" id="deleteConfirmText" placeholder="DELETE"
+                        style="width: 100%; padding: 12px 16px; border-radius: 12px; border: 1px solid #e2e8f0; font-family: inherit;">
+                </div>
+                <button id="confirmDeleteBtn"
+                    style="width: 100%; padding: 14px; background: #dc2626; color: white; border: none; border-radius: 12px; font-weight: 600; cursor: pointer;">Delete
+                    My Account</button>
+            </div>
+        </div>
+    </div>
 </body>
 
 </html>
