@@ -126,17 +126,17 @@
             margin-top: 10px;
         }
 
-        /* Header */
-        /* Enhanced Header */
+        /* Header - Emerald Glassmorphism */
         header {
             display: flex;
             align-items: center;
+            justify-content: space-between;
             gap: 24px;
             margin-bottom: 48px;
             padding: 24px 32px;
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
-            border: 1px solid white;
+            border: 1px solid rgba(255, 255, 255, 0.5);
             border-radius: var(--radius-xl);
             box-shadow: var(--shadow-premium);
         }
@@ -351,6 +351,60 @@
 
         .product-card:hover .product-image img {
             transform: scale(1.1);
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #EF4444;
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            background: #EF4444;
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .alert {
+            padding: 16px 20px;
+            border-radius: 12px;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            animation: slideInDown 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .alert-success {
+            background: #ECFDF5;
+            color: #065F46;
+            border-left: 4px solid #10B981;
+        }
+
+        .alert-error {
+            background: #FEF2F2;
+            color: #991B1B;
+            border-left: 4px solid #EF4444;
+        }
+
+        @keyframes slideInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .product-info {
@@ -814,19 +868,10 @@
 
 <body>
     <div class="container">
-        <!-- Setup Instructions Banner -->
-        <div class="setup-banner" id="setupBanner" style="display: none;">
-            <h3>⚙️ Database Setup Required</h3>
-            <p>To enable all features (chat, venue selection, deal approval), please add these tables to your Supabase:
-            </p>
-            <ol>
-                <li><strong>Update books table:</strong> Add columns: meeting_venue, buyer_approved, seller_approved,
-                    deal_completed, seller_id</li>
-                <li><strong>Create messages table:</strong> For the chat feature</li>
-            </ol>
-            <p>Click below for step-by-step instructions:</p>
-            <button onclick="showSetupInstructions()">📖 Show Setup Guide</button>
-            <button onclick="dismissSetupBanner()" style="background: #999; margin-left: 10px;">Maybe Later</button>
+        <!-- System Alerts -->
+        <div id="alertBox" class="alert" style="display: none; margin-bottom: 24px;">
+            <div id="alertTitle" style="font-weight: 800; margin-bottom: 4px;"></div>
+            <div id="alertMessage"></div>
         </div>
 
         <!-- Header -->
@@ -841,7 +886,7 @@
                     <p>Buy & sell study materials</p>
                 </div>
             </div>
-            <a href="sell_item.html"
+            <a href="sell_item_fixed.html"
                 style="background: linear-gradient(135deg, #8FD14F 0%, #7AB839 100%); color: white; padding: 12px 24px; border-radius: 25px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; align-items: center; gap: 10px; transition: all 0.3s ease; white-space: nowrap;"
                 onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 30px rgba(143,209,79,0.4)'"
                 onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 20px rgba(0,0,0,0.08)'">
@@ -932,7 +977,10 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlcXZvc2h3aWxsbHZqdWVwYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDc3MzUsImV4cCI6MjA4NTY4MzczNX0.AGYzSZYxViV8tuiPQCMmVU4LnfLRqlwY3eHoJ5lM4Ow'
 
         let supabase;
-        let currentUser = 'student_' + Math.random().toString(36).substr(2, 9); // Simulated user ID
+        if (!localStorage.getItem('bookloop_user_id')) {
+            localStorage.setItem('bookloop_user_id', 'student_' + Math.random().toString(36).substr(2, 9));
+        }
+        let currentUser = localStorage.getItem('bookloop_user_id');
         let currentProduct = null;
         let chatRefreshInterval = null;
         let hasMessagesTable = false;
@@ -1064,13 +1112,22 @@ That's it! All features will work after this setup.
                 return
             }
 
-            grid.innerHTML = books.map(book => `
+            grid.innerHTML = books.map(book => {
+                const isSeller = currentUser === (book.seller_id || book.seller);
+                return `
                 <div class="product-card" onclick="openProductDetail(${book.id})">
                     <div class="product-image">
                         <img src="${book.image || 'https://via.placeholder.com/260x200?text=No+Image'}" alt="${book.title}">
                     </div>
                     <div class="product-info">
-                        <div class="product-name">${book.title}</div>
+                        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                            <div class="product-name">${book.title}</div>
+                            ${isSeller ? `
+                                <button class="delete-btn" onclick="event.stopPropagation(); deleteBook(${book.id})" title="Delete Listing">
+                                    <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+                                </button>
+                            ` : ''}
+                        </div>
                         <div class="product-price">₹${book.price}</div>
                         <div class="product-seller">
                             <svg style="width: 16px; height: 16px;" fill="currentColor" viewBox="0 0 20 20">
@@ -1080,7 +1137,8 @@ That's it! All features will work after this setup.
                         </div>
                     </div>
                 </div>
-            `).join('')
+                `;
+            }).join('');
         }
 
         // ==========================================
@@ -1535,6 +1593,45 @@ That's it! All features will work after this setup.
                 closeProductModal()
             }
         })
+        // ==========================================
+        // UTILS & FEEDBACK
+        // ==========================================
+        function showAlert(title, msg, type = 'success') {
+            const box = document.getElementById('alertBox');
+            box.style.display = 'block';
+            box.className = `alert alert-${type}`;
+            document.getElementById('alertTitle').textContent = title;
+            document.getElementById('alertMessage').textContent = msg;
+
+            setTimeout(() => {
+                box.style.opacity = '0';
+                box.style.transform = 'translateY(-10px)';
+                setTimeout(() => {
+                    box.style.display = 'none';
+                    box.style.opacity = '1';
+                    box.style.transform = 'translateY(0)';
+                }, 300);
+            }, 5000);
+        }
+
+        async function deleteBook(id) {
+            if (!confirm('Are you sure you want to delete this listing?')) return;
+
+            try {
+                const { error } = await supabase
+                    .from('books')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                showAlert('✅ Success', 'Book listing removed successfully.');
+                loadBooks(); // Refresh list
+            } catch (error) {
+                console.error('Error deleting book:', error);
+                showAlert('⚠️ Error', 'Failed to delete listing: ' + error.message, 'error');
+            }
+        }
     </script>
 </body>
 
