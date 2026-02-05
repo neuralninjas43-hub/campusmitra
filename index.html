@@ -1156,8 +1156,9 @@
         <!-- Call to Action -->
         <div class="cta-section">
             <p class="cta-text">
-                Join 1,000+ students who rely on Campus Mitra to make their<br>
+                Join,Students who rely on Campus Mitra to make their<br>
                 student life easier and more organized.
+                Let's Connect at Campus Mitra ( Your Campus Friend)
             </p>
             <button class="get-started-btn">Get Started</button>
         </div>
@@ -1491,8 +1492,8 @@
 
     <script>
         // Gemini API Configuration
-        const GEMINI_API_KEY = 'AIzaSyCJj8PkU8NMw0qdkPcTPMgmRvHgIQusyq4';
-        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
+        const GEMINI_API_KEY = 'AIzaSyDsGk2bQQ5p1jn8nWx-x2isR7G9KRi6BoU';
+        const GEMINI_API_URL = "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent";
 
         // DOM Elements
         const chatbotToggle = document.getElementById('chatbotToggle');
@@ -1540,12 +1541,12 @@
             showTypingIndicator();
 
             try {
-                // Call Gemini API
-                const response = await fetch(GEMINI_API_URL, {
+                // Call Gemini API with key as query parameter
+                const apiUrl = `${GEMINI_API_URL}?key=${GEMINI_API_KEY}`;
+                const response = await fetch(apiUrl, {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json',
-                        'x-goog-api-key': GEMINI_API_KEY
+                        'Content-Type': 'application/json'
                     },
                     body: JSON.stringify({
                         contents: [{
@@ -1565,14 +1566,23 @@ User question: ${message}`
                     })
                 });
 
-                // Check if response is ok
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    console.error('API Error Response:', errorData);
-                    throw new Error(errorData.error?.message || response.statusText);
+                // Get response as text first to handle non-JSON errors
+                const responseText = await response.text();
+                let data;
+                try {
+                    data = JSON.parse(responseText);
+                } catch (e) {
+                    console.error('Failed to parse response as JSON:', responseText);
+                    throw new Error(`Invalid JSON response: ${responseText.substring(0, 100)}...`);
                 }
 
-                const data = await response.json();
+                // Check if response is ok
+                if (!response.ok) {
+                    console.error('API Error Response:', data);
+                    const statusReason = data.error?.status || 'Unknown Status';
+                    const messageDetail = data.error?.message || response.statusText;
+                    throw new Error(`${statusReason}: ${messageDetail}`);
+                }
                 console.log('API Response:', data);
 
                 // Hide typing indicator
@@ -1582,11 +1592,10 @@ User question: ${message}`
                     const botResponse = data.candidates[0].content.parts[0].text;
                     addMessage(botResponse, 'bot');
                 } else if (data.error) {
-                    console.error('API returned error:', data.error);
-                    addMessage(`⚠️ API Error: ${data.error.message || 'Unknown error'}`, 'bot');
+                    throw new Error(data.error.message || 'API returned an error object without a message');
                 } else {
                     console.error('Unexpected response format:', data);
-                    addMessage('🤔 Sorry, I received an unexpected response. Please try again.', 'bot');
+                    throw new Error('Unexpected response format from API');
                 }
             } catch (error) {
                 console.error('Error calling Gemini API:', error);
