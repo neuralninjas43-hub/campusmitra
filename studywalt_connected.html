@@ -1,25 +1,52 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>StudyVault - Find, Save & Share Academic Resources</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <title>StudyVault - Your Academic Resource Hub</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+
     <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
+
     <style>
         :root {
-            --teal-gradient-start: #7DD3C0;
-            --teal-gradient-end: #5DAFBE;
-            --card-bg: #f8f8f8;
-            --text-dark: #1a1a1a;
-            --text-muted: #666;
-            --blue-primary: #4A7BA7;
-            --red-pdf: #D45B5B;
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+            /* Modern Color Palette */
+            --primary-start: #6366F1;
+            --primary-end: #8B5CF6;
+            --secondary: #06B6D4;
+            --accent: #F59E0B;
+            --success: #10B981;
+            --error: #EF4444;
+
+            /* Neutrals */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-tertiary: #F3F4F6;
+            --border-light: #E5E7EB;
+            --border-medium: #D1D5DB;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-tertiary: #9CA3AF;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+
+            /* Spacing */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-12: 48px;
+            --space-16: 64px;
         }
 
         * {
@@ -29,60 +56,63 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, var(--teal-gradient-start) 0%, var(--teal-gradient-end) 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
             min-height: 100vh;
-            padding: 20px;
-            animation: gradientShift 15s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(5deg); }
-        }
-
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            color: var(--text-primary);
+            line-height: 1.6;
         }
 
         /* Header */
         header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 40px;
-            animation: slideDown 0.8s ease-out;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+            animation: slideDown 0.6s ease-out;
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--space-6);
         }
 
         .brand-section {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: var(--space-3);
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: var(--shadow-soft);
+            box-shadow: var(--shadow-md);
             transition: transform 0.3s ease;
         }
 
         .logo:hover {
-            transform: rotate(5deg) scale(1.05);
+            transform: scale(1.05) rotate(2deg);
         }
 
         .logo img {
@@ -91,394 +121,727 @@
             object-fit: cover;
         }
 
-        .brand {
-            flex: 1;
+        .brand-text h1 {
+            font-size: 1.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 2px;
         }
 
-        .brand h1 {
-            font-family: 'DM Serif Display', serif;
-            font-size: 2.5rem;
-            color: var(--text-dark);
-            margin-bottom: 5px;
-            letter-spacing: -0.5px;
-        }
-
-        .brand p {
-            color: var(--text-dark);
-            font-size: 1rem;
-            font-weight: 400;
-            opacity: 0.8;
-        }
-
-        .header-right {
-            display: flex;
-            align-items: center;
-            gap: 15px;
-        }
-
-        .upload-btn {
-            background: linear-gradient(135deg, #8FD14F 0%, #7AB839 100%);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            box-shadow: var(--shadow-soft);
-            transition: all 0.3s ease;
-            color: white;
-            font-size: 0.95rem;
-            font-weight: 600;
-            font-family: 'Outfit', sans-serif;
-            text-decoration: none;
-        }
-
-        .upload-btn:hover {
-            transform: translateY(-2px) scale(1.05);
-            box-shadow: 0 6px 20px rgba(143, 209, 79, 0.4);
-        }
-
-        .upload-icon {
-            width: 20px;
-            height: 20px;
-        }
-
-        .campus-badge {
-            background: white;
-            padding: 12px 20px;
-            border-radius: 25px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            box-shadow: var(--shadow-soft);
-            font-size: 0.95rem;
-            color: var(--text-dark);
+        .brand-text p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
             font-weight: 500;
         }
 
-        .campus-icon {
-            width: 20px;
-            height: 20px;
-            opacity: 0.6;
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
         }
 
-        /* Search Bar */
-        .search-container {
-            margin-bottom: 30px;
+        .btn {
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            display: inline-flex;
+            align-items: center;
+            gap: var(--space-2);
+            text-decoration: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            color: white;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: 1px solid var(--border-light);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-tertiary);
+        }
+
+        .btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-start) 0%, var(--primary-end) 100%);
+            color: white;
+            padding: var(--space-16) var(--space-6);
+            position: relative;
+            overflow: hidden;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content {
+            max-width: 700px;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            font-weight: 900;
+            margin-bottom: var(--space-4);
+            line-height: 1.1;
             animation: slideUp 0.8s ease-out 0.2s both;
         }
 
         @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .search-bar {
-            display: flex;
-            align-items: center;
-            background: white;
-            border-radius: 12px;
-            padding: 0 10px 0 25px;
-            box-shadow: var(--shadow-soft);
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.95;
+            margin-bottom: var(--space-8);
+            animation: slideUp 0.8s ease-out 0.3s both;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-12);
+            animation: slideUp 0.8s ease-out 0.4s both;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: var(--space-6);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             transition: all 0.3s ease;
         }
 
-        .search-bar:focus-within {
-            box-shadow: var(--shadow-hover);
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: var(--space-2);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            opacity: 0.9;
+            font-weight: 500;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-8) var(--space-6);
+        }
+
+        /* Search Section */
+        .search-section {
+            margin-bottom: var(--space-8);
+            animation: slideUp 0.8s ease-out 0.5s both;
+        }
+
+        .search-wrapper {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: var(--space-2);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            transition: all 0.3s ease;
+        }
+
+        .search-wrapper:focus-within {
+            box-shadow: var(--shadow-xl);
             transform: translateY(-2px);
         }
 
         .search-icon {
             width: 24px;
             height: 24px;
-            color: var(--text-muted);
-            margin-right: 10px;
+            color: var(--text-tertiary);
+            margin-left: var(--space-4);
         }
 
-        .search-bar input {
+        .search-input {
             flex: 1;
             border: none;
-            padding: 18px 10px;
-            font-size: 1rem;
-            font-family: 'Outfit', sans-serif;
             outline: none;
+            padding: var(--space-4);
+            font-size: 1rem;
+            font-family: inherit;
             background: transparent;
         }
 
-        .search-btn {
-            background: linear-gradient(135deg, var(--blue-primary) 0%, #3D668E 100%);
-            border: none;
-            padding: 12px 24px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
+        .search-input::placeholder {
+            color: var(--text-tertiary);
+        }
+
+        .filter-toggle {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-light);
+            padding: 10px 16px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            gap: 8px;
-        }
-
-        .search-btn:hover {
-            transform: scale(1.05);
-        }
-
-        /* Main Layout */
-        .main-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 30px;
-            animation: fadeInUp 0.8s ease-out 0.3s both;
-        }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(40px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        /* Sidebar Filters */
-        .sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .filter-section {
-            background: white;
-            padding: 20px;
-            border-radius: 16px;
-            box-shadow: var(--shadow-soft);
-        }
-
-        .filter-section h3 {
-            font-size: 1.1rem;
-            color: var(--text-dark);
-            margin-bottom: 15px;
+            gap: var(--space-2);
             font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+        }
+
+        .filter-toggle:hover {
+            background: var(--bg-tertiary);
+        }
+
+        /* Filters Panel */
+        .filters-panel {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            padding: var(--space-6);
+            margin-bottom: var(--space-6);
+            box-shadow: var(--shadow-md);
+            display: none;
+            animation: slideDown 0.3s ease-out;
+        }
+
+        .filters-panel.active {
+            display: block;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-4);
+        }
+
+        .filter-group label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: var(--space-2);
         }
 
         .filter-select {
             width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #E0E0E0;
+            padding: 10px 12px;
+            border: 1px solid var(--border-light);
             border-radius: 10px;
-            font-family: 'Outfit', sans-serif;
-            font-size: 0.95rem;
+            font-family: inherit;
+            font-size: 0.875rem;
+            background: var(--bg-primary);
             cursor: pointer;
             transition: all 0.3s ease;
-            background: white;
         }
 
         .filter-select:focus {
             outline: none;
-            border-color: var(--blue-primary);
+            border-color: var(--primary-start);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
         }
 
         /* Resources Grid */
-        .resources-section {
+        .resources-header {
             display: flex;
-            flex-direction: column;
-            gap: 30px;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: var(--space-6);
+        }
+
+        .resources-header h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .view-toggle {
+            display: flex;
+            gap: var(--space-2);
+        }
+
+        .view-btn {
+            padding: var(--space-2);
+            border: 1px solid var(--border-light);
+            background: var(--bg-primary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .view-btn.active {
+            background: var(--primary-start);
+            border-color: var(--primary-start);
+            color: white;
+        }
+
+        .view-btn svg {
+            width: 20px;
+            height: 20px;
         }
 
         .resources-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+            gap: var(--space-6);
+            animation: fadeInUp 0.8s ease-out 0.6s both;
         }
 
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Resource Card */
         .resource-card {
-            background: white;
+            background: var(--bg-primary);
             border-radius: 16px;
-            padding: 20px;
-            box-shadow: var(--shadow-soft);
-            display: flex;
-            gap: 15px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
             transition: all 0.3s ease;
             cursor: pointer;
+            position: relative;
         }
 
         .resource-card:hover {
-            transform: translateY(-5px);
-            box-shadow: var(--shadow-hover);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-2xl);
         }
 
-        .resource-icon {
-            width: 50px;
-            height: 50px;
-            border-radius: 12px;
+        .resource-card:hover .quick-actions {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .resource-thumbnail {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
+            position: relative;
+            overflow: hidden;
         }
 
-        .icon-pdf {
-            background: linear-gradient(135deg, #FF6B6B 0%, #D45B5B 100%);
+        .resource-thumbnail svg {
+            width: 64px;
+            height: 64px;
+            opacity: 0.3;
+        }
+
+        .file-type-badge {
+            position: absolute;
+            top: var(--space-3);
+            right: var(--space-3);
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .badge-pdf {
+            background: rgba(239, 68, 68, 0.9);
             color: white;
         }
 
-        .icon-link {
-            background: linear-gradient(135deg, #4A7BA7 0%, #3D668E 100%);
+        .badge-link {
+            background: rgba(6, 182, 212, 0.9);
             color: white;
         }
 
-        .icon-video {
-            background: linear-gradient(135deg, #8FD14F 0%, #7AB839 100%);
+        .badge-video {
+            background: rgba(16, 185, 129, 0.9);
             color: white;
-        }
-
-        .resource-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: none;
-            stroke: currentColor;
-            stroke-width: 2;
-            stroke-linecap: round;
-            stroke-linejoin: round;
         }
 
         .resource-content {
-            flex: 1;
+            padding: var(--space-4);
         }
 
         .resource-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 10px;
+            font-size: 1.125rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-3);
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
         }
 
         .resource-meta {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            font-size: 0.9rem;
+            gap: var(--space-4);
+            margin-bottom: var(--space-3);
+            font-size: 0.875rem;
+            color: var(--text-secondary);
         }
 
-        .resource-uploader {
-            color: var(--text-muted);
-        }
-
-        .resource-uploader strong {
-            color: var(--text-dark);
-        }
-
-        .resource-votes {
+        .meta-item {
             display: flex;
             align-items: center;
-            gap: 5px;
-            color: var(--blue-primary);
-            font-weight: 600;
+            gap: var(--space-1);
         }
 
-        .vote-icon {
+        .meta-item svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .resource-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: var(--space-3);
+            border-top: 1px solid var(--border-light);
+        }
+
+        .uploader-info {
+            display: flex;
+            align-items: center;
+            gap: var(--space-2);
+        }
+
+        .avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-start), var(--primary-end));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        .uploader-name {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .likes {
+            display: flex;
+            align-items: center;
+            gap: var(--space-1);
+            color: var(--primary-start);
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .likes svg {
             width: 18px;
             height: 18px;
         }
 
-        /* Loading & Empty States */
-        .loading-state,
+        /* Quick Actions */
+        .quick-actions {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -40%);
+            display: flex;
+            gap: var(--space-2);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 10;
+        }
+
+        .action-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: white;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            transform: scale(1.1);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .action-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-primary);
+        }
+
+        /* Loading Skeleton */
+        .skeleton-card {
+            background: var(--bg-primary);
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+        }
+
+        .skeleton-thumbnail {
+            width: 100%;
+            height: 180px;
+            background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+        }
+
+        @keyframes shimmer {
+            0% {
+                background-position: -200% 0;
+            }
+
+            100% {
+                background-position: 200% 0;
+            }
+        }
+
+        .skeleton-content {
+            padding: var(--space-4);
+        }
+
+        .skeleton-line {
+            height: 16px;
+            background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
+            background-size: 200% 100%;
+            animation: shimmer 1.5s infinite;
+            border-radius: 4px;
+            margin-bottom: var(--space-2);
+        }
+
+        .skeleton-line.title {
+            height: 24px;
+            width: 80%;
+        }
+
+        .skeleton-line.short {
+            width: 60%;
+        }
+
+        /* Empty State */
         .empty-state {
             text-align: center;
-            padding: 60px 20px;
+            padding: var(--space-16) var(--space-6);
             grid-column: 1 / -1;
         }
 
-        .loading-state {
-            font-size: 1.2rem;
-            color: var(--text-dark);
+        .empty-icon {
+            width: 120px;
+            height: 120px;
+            margin: 0 auto var(--space-6);
+            opacity: 0.3;
         }
 
-        .empty-state {
-            font-size: 1.1rem;
-            color: var(--text-muted);
+        .empty-state h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: var(--space-3);
+        }
+
+        .empty-state p {
+            color: var(--text-secondary);
+            margin-bottom: var(--space-6);
         }
 
         /* Responsive */
-        @media (max-width: 968px) {
-            .main-layout {
-                grid-template-columns: 1fr;
-            }
-
-            .sidebar {
-                order: 2;
-            }
-
-            header {
-                flex-direction: column;
-                gap: 20px;
-            }
-
-            .header-right {
-                width: 100%;
-                justify-content: space-between;
-            }
-        }
-
-        @media (max-width: 640px) {
-            .brand h1 {
+        @media (max-width: 768px) {
+            .hero h2 {
                 font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
             }
 
             .resources-grid {
                 grid-template-columns: 1fr;
             }
+
+            .header-actions {
+                flex-wrap: wrap;
+            }
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header>
+    <!-- Header -->
+    <header>
+        <div class="header-container">
             <div class="brand-section">
                 <div class="logo">
-                    <img src="study_walt logo.JPG" alt="StudyVault Logo">
+                    <img src="study_walt logo.JPG" alt="StudyVault">
                 </div>
-                <div class="brand">
+                <div class="brand-text">
                     <h1>StudyVault</h1>
-                    <p>Find, save & share academic resources</p>
+                    <p>Academic Resource Hub</p>
                 </div>
             </div>
-            <div class="header-right">
-                <a href="upload_resource_connected.html" class="upload-btn">
-                    <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+            <div class="header-actions">
+                <a href="upload_resource_connected.html" class="btn btn-primary">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12">
+                        </path>
                     </svg>
-                    Upload Resource
+                    Upload
                 </a>
-                <div class="campus-badge">
-                    <svg class="campus-icon" fill="currentColor" viewBox="0 0 20 20">
-                        <path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"/>
+                <a href="index.html" class="btn btn-secondary">
+                    <svg fill="currentColor" viewBox="0 0 20 20">
+                        <path
+                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
                     </svg>
-                    Campus Mitra
+                    Home
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h2>Your Academic Resource Hub</h2>
+                <p>Discover, share, and access thousands of study materials, notes, and resources curated by students
+                    for students.</p>
+            </div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalResources">0</div>
+                    <div class="stat-label">Total Resources</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalDownloads">0</div>
+                    <div class="stat-label">Downloads</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalUsers">0</div>
+                    <div class="stat-label">Contributors</div>
                 </div>
             </div>
-        </header>
+        </div>
+    </section>
 
-        <!-- Search Bar -->
-        <div class="search-container">
-            <div class="search-bar">
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-wrapper">
                 <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
-                <input type="text" id="searchInput" placeholder="Search for resources, notes, PDFs...">
-                <button class="search-btn" onclick="searchResources()">
-                    <svg width="20" height="20" fill="white" viewBox="0 0 24 24">
-                        <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" stroke="white" stroke-width="2" stroke-linecap="round" fill="none"/>
+                <input type="text" class="search-input" id="searchInput"
+                    placeholder="Search for resources, notes, PDFs...">
+                <button class="filter-toggle" onclick="toggleFilters()">
+                    <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
                     </svg>
-                    Search
+                    Filters
                 </button>
+                <button class="btn btn-primary" onclick="searchResources()">Search</button>
             </div>
         </div>
 
-        <!-- Main Layout -->
-        <div class="main-layout">
-            <!-- Sidebar Filters -->
-            <aside class="sidebar">
-                <div class="filter-section">
-                    <h3>Subject:</h3>
+        <!-- Filters Panel -->
+        <div class="filters-panel" id="filtersPanel">
+            <div class="filters-grid">
+                <div class="filter-group">
+                    <label>Subject</label>
                     <select class="filter-select" id="subjectFilter" onchange="filterResources()">
                         <option value="">All Subjects</option>
                         <option value="Computer Science">Computer Science</option>
@@ -488,9 +851,8 @@
                         <option value="Biology">Biology</option>
                     </select>
                 </div>
-
-                <div class="filter-section">
-                    <h3>Resource Type:</h3>
+                <div class="filter-group">
+                    <label>Resource Type</label>
                     <select class="filter-select" id="typeFilter" onchange="filterResources()">
                         <option value="">All Types</option>
                         <option value="PDF">PDF Documents</option>
@@ -498,39 +860,65 @@
                         <option value="Video">Video Links</option>
                     </select>
                 </div>
-
-                <div class="filter-section">
-                    <h3>Sort by:</h3>
+                <div class="filter-group">
+                    <label>Sort By</label>
                     <select class="filter-select" id="sortFilter" onchange="filterResources()">
                         <option value="recent">Recently Added</option>
                         <option value="likes">Most Upvoted</option>
                         <option value="downloads">Most Downloaded</option>
                     </select>
                 </div>
-            </aside>
+            </div>
+        </div>
 
-            <!-- Main Content -->
-            <main class="resources-section">
-                <!-- Resources Grid -->
-                <div class="resources-grid" id="resourcesGrid">
-                    <div class="loading-state">Loading resources...</div>
+        <!-- Resources Section -->
+        <div class="resources-header">
+            <h3>All Resources</h3>
+        </div>
+
+        <div class="resources-grid" id="resourcesGrid">
+            <!-- Loading skeletons -->
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
                 </div>
-            </main>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+            </div>
+            <div class="skeleton-card">
+                <div class="skeleton-thumbnail"></div>
+                <div class="skeleton-content">
+                    <div class="skeleton-line title"></div>
+                    <div class="skeleton-line"></div>
+                    <div class="skeleton-line short"></div>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        // ==========================================
-        // SUPABASE SETUP - REPLACE WITH YOUR KEYS!
-        // ==========================================
+        // Supabase Setup
         const SUPABASE_URL = 'https://geqvoshwilllvjuepbfg.supabase.co'
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlcXZvc2h3aWxsbHZqdWVwYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDc3MzUsImV4cCI6MjA4NTY4MzczNX0.AGYzSZYxViV8tuiPQCMmVU4LnfLRqlwY3eHoJ5lM4Ow'
-        
+
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-        // ==========================================
-        // LOAD RESOURCES FROM SUPABASE
-        // ==========================================
+        // Toggle Filters
+        function toggleFilters() {
+            const panel = document.getElementById('filtersPanel')
+            panel.classList.toggle('active')
+        }
+
+        // Load Resources
         async function loadResources() {
             try {
                 const { data: resources, error } = await supabaseClient
@@ -540,75 +928,119 @@
 
                 if (error) throw error
 
+                // Update stats
+                updateStats(resources)
                 displayResources(resources)
             } catch (error) {
                 console.error('Error loading resources:', error)
                 document.getElementById('resourcesGrid').innerHTML = `
                     <div class="empty-state">
-                        <p>Error loading resources. Please check console.</p>
+                        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                        </svg>
+                        <h3>Error Loading Resources</h3>
+                        <p>Please check your connection and try again.</p>
                     </div>
                 `
             }
         }
 
-        // ==========================================
-        // DISPLAY RESOURCES
-        // ==========================================
+        // Update Stats
+        function updateStats(resources) {
+            const totalResources = resources.length
+            const totalDownloads = resources.reduce((sum, r) => sum + (r.downloads || 0), 0)
+            const uniqueUsers = new Set(resources.map(r => r.uploaded_by)).size
+
+            animateValue('totalResources', 0, totalResources, 1000)
+            animateValue('totalDownloads', 0, totalDownloads, 1000)
+            animateValue('totalUsers', 0, uniqueUsers, 1000)
+        }
+
+        function animateValue(id, start, end, duration) {
+            const element = document.getElementById(id)
+            const range = end - start
+            const increment = range / (duration / 16)
+            let current = start
+
+            const timer = setInterval(() => {
+                current += increment
+                if (current >= end) {
+                    element.textContent = end
+                    clearInterval(timer)
+                } else {
+                    element.textContent = Math.floor(current)
+                }
+            }, 16)
+        }
+
+        // Display Resources
         function displayResources(resources) {
             const grid = document.getElementById('resourcesGrid')
-            
+
             if (resources.length === 0) {
                 grid.innerHTML = `
                     <div class="empty-state">
-                        <p>No resources found. Be the first to upload!</p>
+                        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+                        </svg>
+                        <h3>No Resources Found</h3>
+                        <p>Be the first to upload and share your knowledge!</p>
+                        <a href="upload_resource_connected.html" class="btn btn-primary">Upload Resource</a>
                     </div>
                 `
                 return
             }
 
             grid.innerHTML = resources.map(resource => {
-                // Determine icon type
-                let iconClass = 'icon-pdf'
-                let iconSVG = `
-                    <svg viewBox="0 0 24 24">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
-                        <path d="M14 2v6h6"/>
-                        <path d="M9 13h6"/>
-                        <path d="M9 17h6"/>
-                    </svg>
-                `
-
-                if (resource.type === 'Link') {
-                    iconClass = 'icon-link'
-                    iconSVG = `
-                        <svg viewBox="0 0 24 24">
-                            <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
-                            <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
-                        </svg>
-                    `
-                } else if (resource.type === 'Video') {
-                    iconClass = 'icon-video'
-                    iconSVG = `
-                        <svg viewBox="0 0 24 24">
-                            <polygon points="5 3 19 12 5 21 5 3"/>
-                        </svg>
-                    `
-                }
+                const badgeClass = resource.type === 'PDF' ? 'badge-pdf' : resource.type === 'Video' ? 'badge-video' : 'badge-link'
+                const iconSVG = getResourceIcon(resource.type)
+                const initials = resource.uploaded_by.substring(0, 2).toUpperCase()
+                const timeAgo = getTimeAgo(resource.created_at)
 
                 return `
                     <div class="resource-card" onclick="window.open('${resource.file_url}', '_blank')">
-                        <div class="resource-icon ${iconClass}">
+                        <div class="resource-thumbnail">
                             ${iconSVG}
+                            <div class="file-type-badge ${badgeClass}">${resource.type}</div>
+                            <div class="quick-actions">
+                                <button class="action-btn" onclick="event.stopPropagation(); downloadResource('${resource.file_url}')" title="Download">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                    </svg>
+                                </button>
+                                <button class="action-btn" onclick="event.stopPropagation(); shareResource('${resource.file_url}')" title="Share">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"/>
+                                    </svg>
+                                </button>
+                            </div>
                         </div>
                         <div class="resource-content">
                             <div class="resource-title">${resource.title}</div>
                             <div class="resource-meta">
-                                <div class="resource-uploader">Uploaded by: <strong>${resource.uploaded_by}</strong></div>
-                                <div class="resource-votes">
-                                    <svg class="vote-icon" fill="currentColor" viewBox="0 0 20 20">
+                                <div class="meta-item">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                    </svg>
+                                    ${timeAgo}
+                                </div>
+                                <div class="meta-item">
+                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                                    </svg>
+                                    ${resource.downloads || 0}
+                                </div>
+                            </div>
+                            <div class="resource-footer">
+                                <div class="uploader-info">
+                                    <div class="avatar">${initials}</div>
+                                    <div class="uploader-name">${resource.uploaded_by}</div>
+                                </div>
+                                <div class="likes">
+                                    <svg fill="currentColor" viewBox="0 0 20 20">
                                         <path d="M2 10.5a1.5 1.5 0 113 0v6a1.5 1.5 0 01-3 0v-6zM6 10.333v5.43a2 2 0 001.106 1.79l.05.025A4 4 0 008.943 18h5.416a2 2 0 001.962-1.608l1.2-6A2 2 0 0015.56 8H12V4a2 2 0 00-2-2 1 1 0 00-1 1v.667a4 4 0 01-.8 2.4L6.8 7.933a4 4 0 00-.8 2.4z"/>
                                     </svg>
-                                    <span>${resource.likes} Upvotes</span>
+                                    ${resource.likes || 0}
                                 </div>
                             </div>
                         </div>
@@ -617,12 +1049,45 @@
             }).join('')
         }
 
-        // ==========================================
-        // SEARCH RESOURCES
-        // ==========================================
+        function getResourceIcon(type) {
+            if (type === 'PDF') {
+                return `<svg fill="currentColor" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/><path d="M14 2v6h6"/><path d="M9 13h6"/><path d="M9 17h6"/></svg>`
+            } else if (type === 'Video') {
+                return `<svg fill="currentColor" viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"/></svg>`
+            } else {
+                return `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>`
+            }
+        }
+
+        function getTimeAgo(dateString) {
+            const date = new Date(dateString)
+            const now = new Date()
+            const seconds = Math.floor((now - date) / 1000)
+
+            if (seconds < 60) return 'Just now'
+            if (seconds < 3600) return `${Math.floor(seconds / 60)}m ago`
+            if (seconds < 86400) return `${Math.floor(seconds / 3600)}h ago`
+            if (seconds < 604800) return `${Math.floor(seconds / 86400)}d ago`
+            return date.toLocaleDateString()
+        }
+
+        function downloadResource(url) {
+            window.open(url, '_blank')
+        }
+
+        function shareResource(url) {
+            if (navigator.share) {
+                navigator.share({ url: url })
+            } else {
+                navigator.clipboard.writeText(url)
+                alert('Link copied to clipboard!')
+            }
+        }
+
+        // Search Resources
         async function searchResources() {
             const query = document.getElementById('searchInput').value.trim()
-            
+
             if (!query) {
                 loadResources()
                 return
@@ -641,9 +1106,7 @@
             }
         }
 
-        // ==========================================
-        // FILTER RESOURCES
-        // ==========================================
+        // Filter Resources
         async function filterResources() {
             const subject = document.getElementById('subjectFilter').value
             const type = document.getElementById('typeFilter').value
@@ -652,14 +1115,9 @@
             try {
                 let query = supabaseClient.from('resources').select('*')
 
-                if (subject) {
-                    query = query.eq('subject', subject)
-                }
-                if (type) {
-                    query = query.eq('type', type)
-                }
+                if (subject) query = query.eq('subject', subject)
+                if (type) query = query.eq('type', type)
 
-                // Sorting
                 if (sort === 'recent') {
                     query = query.order('created_at', { ascending: false })
                 } else if (sort === 'likes') {
@@ -669,7 +1127,6 @@
                 }
 
                 const { data, error } = await query
-
                 if (error) throw error
                 displayResources(data)
             } catch (error) {
@@ -677,15 +1134,14 @@
             }
         }
 
-        // ==========================================
-        // INITIALIZE
-        // ==========================================
+        // Initialize
         window.addEventListener('DOMContentLoaded', loadResources)
 
-        // Search on Enter key
+        // Search on Enter
         document.getElementById('searchInput').addEventListener('keypress', (e) => {
             if (e.key === 'Enter') searchResources()
         })
     </script>
 </body>
+
 </html>
