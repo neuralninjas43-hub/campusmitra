@@ -1,0 +1,1058 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookLoop Premium - Next Gen Marketplace</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Sora:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lucide/0.263.0/lucide.min.js"></script>
+    <style>
+        :root {
+            /* Premium Palette: Aurora Night */
+            --midnight: #0F172A;
+            --deep-indigo: #1E1B4B;
+            --aurora-green: #10B981;
+            --aurora-light: #34D399;
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-200: #E2E8F0;
+            --slate-400: #94A3B8;
+            --slate-800: #1E293B;
+            --slate-900: #0F172A;
+
+            /* Glassmorphism */
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --glass-blur: blur(16px);
+
+            /* Spacing & Radius */
+            --radius-2xl: 32px;
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+
+            /* Shadows */
+            --shadow-premium: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+            --glow-green: 0 0 20px rgba(16, 185, 129, 0.2);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            background-color: var(--midnight);
+            color: white;
+            min-height: 100vh;
+            display: gap;
+            overflow-x: hidden;
+        }
+
+        /* Abstract Background Elements */
+        .bg-glow {
+            position: fixed;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(79, 70, 229, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            top: -200px;
+            right: -200px;
+            animation: float 20s infinite alternate;
+        }
+
+        .bg-glow-alt {
+            position: fixed;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            z-index: -1;
+            bottom: -100px;
+            left: -100px;
+            animation: float 15s infinite alternate-reverse;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translate(0, 0);
+            }
+
+            100% {
+                transform: translate(50px, 100px);
+            }
+        }
+
+        /* Sidebar Navigation */
+        aside.sidebar {
+            width: 280px;
+            height: 100vh;
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--glass-border);
+            padding: 40px 24px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            left: 0;
+            top: 0;
+            z-index: 100;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 40px;
+            text-decoration: none;
+        }
+
+        .logo-box {
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, var(--aurora-green), var(--aurora-light));
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: var(--glow-green);
+        }
+
+        .brand-logo h1 {
+            font-family: 'Sora', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: white;
+            letter-spacing: -0.5px;
+        }
+
+        nav.nav-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 40px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            color: rgba(255, 255, 255, 0.6);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .nav-link:hover {
+            color: white;
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .nav-link.active {
+            background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.2));
+            color: var(--aurora-green);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        /* Filter Section in Sidebar */
+        .filter-section {
+            padding: 24px 0;
+            border-top: 1px solid var(--glass-border);
+        }
+
+        .filter-section h3 {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 16px;
+            padding: 0 20px;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 0 20px;
+        }
+
+        .premium-select {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            color: white;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-family: inherit;
+            outline: none;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .premium-select:hover {
+            border-color: var(--aurora-green);
+        }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 24px;
+        }
+
+        /* Main Content Canvas */
+        main.content {
+            margin-left: 280px;
+            flex: 1;
+            padding: 40px 60px;
+            max-width: 1600px;
+        }
+
+        /* Header / Top Bar */
+        header.top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 60px;
+        }
+
+        .search-command {
+            position: relative;
+            width: 500px;
+        }
+
+        .search-command input {
+            width: 100%;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            backdrop-filter: var(--glass-blur);
+            padding: 16px 20px 16px 54px;
+            border-radius: 16px;
+            color: white;
+            font-family: inherit;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s;
+        }
+
+        .search-command input:focus {
+            border-color: var(--aurora-green);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: var(--glow-green);
+        }
+
+        .search-command i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: rgba(255, 255, 255, 0.4);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            background: var(--glass-bg);
+            padding: 8px 16px 8px 8px;
+            border-radius: 100px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .avatar {
+            width: 40px;
+            height: 40px;
+            background: var(--aurora-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--slate-900);
+        }
+
+        .user-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        /* Setup Banner Restored & Stylized */
+        .setup-banner {
+            background: linear-gradient(135deg, rgba(234, 179, 8, 0.1), rgba(234, 179, 8, 0.05));
+            border: 1px solid rgba(234, 179, 8, 0.3);
+            padding: 24px;
+            border-radius: var(--radius-xl);
+            margin-bottom: 40px;
+            display: none;
+            backdrop-filter: var(--glass-blur);
+        }
+
+        .setup-banner h3 {
+            font-family: 'Sora', sans-serif;
+            color: #EAB308;
+            margin-bottom: 8px;
+        }
+
+        .btn-setup {
+            background: #EAB308;
+            color: black;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 16px;
+            transition: 0.3s;
+        }
+
+        /* Products Grid */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 32px;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        /* Premium Book Card */
+        .book-card {
+            background: var(--glass-bg);
+            backdrop-filter: var(--glass-blur);
+            border-radius: var(--radius-xl);
+            border: 1px solid var(--glass-border);
+            padding: 24px;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            cursor: pointer;
+        }
+
+        .book-card:hover {
+            border-color: rgba(16, 185, 129, 0.4);
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 40px 80px -20px rgba(0, 0, 0, 0.5);
+        }
+
+        .card-image-box {
+            width: 100%;
+            height: 200px;
+            border-radius: var(--radius-lg);
+            background: var(--slate-800);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .card-image-box img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s;
+        }
+
+        .book-card:hover .card-image-box img {
+            transform: scale(1.05);
+        }
+
+        .price-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            padding: 8px 16px;
+            border-radius: 100px;
+            font-weight: 800;
+            font-size: 14px;
+            color: var(--aurora-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .book-info h4 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .book-info p {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Modal Overhaul */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(2, 6, 23, 0.85);
+            backdrop-filter: blur(12px);
+            z-index: 1000;
+            overflow-y: auto;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+            opacity: 1;
+        }
+
+        .modal-content {
+            background: var(--midnight);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            max-width: 1100px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            padding: 40px;
+            box-shadow: var(--shadow-premium);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            transform: rotate(90deg);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .product-detail {
+            display: grid;
+            grid-template-columns: 450px 1fr;
+            gap: 40px;
+        }
+
+        .detail-image {
+            width: 100%;
+            height: 500px;
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            border: 1px solid var(--glass-border);
+        }
+
+        .detail-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .detail-info h2 {
+            font-family: 'Sora', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+        }
+
+        .detail-price {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--aurora-green);
+            margin-bottom: 24px;
+        }
+
+        .detail-meta {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+            margin-bottom: 32px;
+        }
+
+        .meta-item {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 16px;
+            border-radius: 12px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .meta-label {
+            display: block;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.4);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+        }
+
+        .meta-value {
+            font-weight: 600;
+        }
+
+        /* Venue Selection Premium */
+        .venue-section {
+            background: rgba(16, 185, 129, 0.03);
+            border: 1px solid rgba(16, 185, 129, 0.1);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            margin-top: 32px;
+        }
+
+        .venue-section h3 {
+            font-family: 'Sora', sans-serif;
+            margin-bottom: 20px;
+            font-size: 1.125rem;
+        }
+
+        .venue-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+        }
+
+        .venue-option {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+            transition: 0.3s;
+        }
+
+        .venue-option:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: var(--aurora-green);
+        }
+
+        .venue-option.selected {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: var(--aurora-green);
+            color: var(--aurora-green);
+            font-weight: 700;
+        }
+
+        /* Chat System Premium */
+        .chat-section {
+            margin-top: 40px;
+            padding-top: 40px;
+            border-top: 1px solid var(--glass-border);
+            grid-column: 1 / -1;
+        }
+
+        .chat-messages {
+            height: 350px;
+            background: rgba(15, 23, 42, 0.5);
+            border-radius: var(--radius-xl);
+            padding: 24px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .message {
+            margin-bottom: 24px;
+            max-width: 80%;
+        }
+
+        .message.my-message {
+            margin-left: auto;
+        }
+
+        .message-sender {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            color: rgba(255, 255, 255, 0.3);
+            margin-bottom: 6px;
+        }
+
+        .message-text {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 14px 20px;
+            border-radius: 16px 16px 16px 4px;
+            border: 1px solid var(--glass-border);
+        }
+
+        .my-message .message-text {
+            background: linear-gradient(135deg, var(--aurora-green), var(--aurora-light));
+            color: var(--slate-900);
+            border: none;
+            border-radius: 16px 16px 4px 16px;
+            font-weight: 500;
+        }
+
+        .chat-input-container {
+            display: flex;
+            gap: 12px;
+        }
+
+        .chat-input {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--glass-border);
+            border-radius: 14px;
+            padding: 16px 20px;
+            color: white;
+            outline: none;
+        }
+
+        /* Deal Actions Premium */
+        .deal-actions {
+            background: linear-gradient(135deg, rgba(79, 70, 229, 0.1), rgba(16, 185, 129, 0.1));
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-2xl);
+            padding: 40px;
+            margin-top: 40px;
+            text-align: center;
+            grid-column: 1 / -1;
+        }
+
+        .deal-status {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin: 32px 0;
+        }
+
+        .status-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--glass-border);
+        }
+
+        .status-icon.approved {
+            background: var(--aurora-green);
+            color: var(--midnight);
+            border: none;
+            box-shadow: var(--glow-green);
+        }
+
+        .btn-premium {
+            background: linear-gradient(135deg, var(--aurora-green), var(--aurora-light));
+            color: var(--midnight);
+            border: none;
+            padding: 16px 32px;
+            border-radius: 14px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-premium:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-premium:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        /* Scrollbar Premium */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--midnight);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--slate-800);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-glow"></div>
+    <div class="bg-glow-alt"></div>
+
+    <!-- Premium Sidebar -->
+    <aside class="sidebar">
+        <a href="index.html" class="brand-logo">
+            <div class="logo-box">
+                <i data-lucide="book-open" size="24" color="#014732"></i>
+            </div>
+            <h1>BookLoop</h1>
+        </a>
+
+        <nav class="nav-menu">
+            <a href="#" class="nav-link active">
+                <i data-lucide="compass" size="20"></i>
+                Marketplace
+            </a>
+            <a href="sell_item.html" class="nav-link">
+                <i data-lucide="plus-circle" size="20"></i>
+                New Listing
+            </a>
+        </nav>
+
+        <div class="filter-section">
+            <h3>Refine Access</h3>
+            <div class="filter-group">
+                <select class="premium-select" id="categoryFilter" onchange="filterBooks()">
+                    <option value="">All Categories</option>
+                    <option value="Books">Books</option>
+                    <option value="Notes">Notes</option>
+                    <option value="Supplies">Supplies</option>
+                </select>
+
+                <select class="premium-select" id="semesterFilter" onchange="filterBooks()">
+                    <option value="">All Semesters</option>
+                    <option value="1">Semester 1</option>
+                    <option value="2">Semester 2</option>
+                    <option value="3">Semester 3</option>
+                    <option value="4">Semester 4</option>
+                    <option value="5">Semester 5</option>
+                </select>
+
+                <select class="premium-select" id="sortFilter" onchange="filterBooks()">
+                    <option value="newest">Newest First</option>
+                    <option value="price_low">Price: Ascending</option>
+                    <option value="price_high">Price: Descending</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sidebar-bottom">
+            <a href="index.html" class="nav-link">
+                <i data-lucide="arrow-left" size="20"></i>
+                Main Terminal
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="content">
+        <header class="top-bar">
+            <div class="search-command">
+                <i data-lucide="search" size="20"></i>
+                <input type="text" placeholder="Search publications by title..." id="searchInput"
+                    onkeypress="if(event.key==='Enter') searchBooks()">
+            </div>
+
+            <div class="user-profile">
+                <div class="avatar">JD</div>
+                <span class="user-name">Scholar Access</span>
+            </div>
+        </header>
+
+        <div class="setup-banner" id="setupBanner">
+            <h3>⚠️ Optimized Database Synchronization Required</h3>
+            <p>Your current backend configuration lacks advanced exchange protocols (Chat, Venues, Deal Status).</p>
+            <button class="btn-setup" onclick="showSetupInstructions()">Run Setup Protocol</button>
+            <button class="btn-setup"
+                style="background: transparent; color: white; border: 1px solid var(--glass-border); margin-left: 10px;"
+                onclick="dismissSetupBanner()">Acknowledge</button>
+        </div>
+
+        <div class="market-grid" id="productsGrid">
+            <!-- Dynamic Injection Point -->
+            <div style="grid-column: 1/-1; text-align: center; padding: 100px;">
+                <i data-lucide="loader-2" class="animate-spin" size="48"></i>
+                <p style="margin-top: 20px; color: rgba(255,255,255,0.4);">Synchronizing with Marketplace...</p>
+            </div>
+        </div>
+    </main>
+
+    <!-- Product Detail Modal -->
+    <div class="modal" id="productModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeProductModal()">
+                <i data-lucide="x" size="24"></i>
+            </button>
+            <div id="productDetail">
+                <div class="product-detail">
+                    <!-- Data will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // ==========================================
+        // INITIALIZATION
+        // ==========================================
+        lucide.createIcons();
+
+        const SUPABASE_URL = 'https://geqvoshwilllvjuepbfg.supabase.co'
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlcXZvc2h3aWxsbHZqdWVwYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDc3MzUsImV4cCI6MjA4NTY4MzczNX0.AGYzSZYxViV8tuiPQCMmVU4LnfLRqlwY3eHoJ5lM4Ow'
+
+        const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+        let currentUser = 'student_' + Math.random().toString(36).substr(2, 9);
+        let currentProduct = null;
+        let chatRefreshInterval = null;
+        let hasMessagesTable = false;
+        let hasEnhancedColumns = false;
+
+        async function checkDatabaseSetup() {
+            try {
+                const { error: msgError } = await supabase.from('messages').select('id').limit(1);
+                hasMessagesTable = !msgError;
+                const { error: colError } = await supabase.from('books').select('meeting_venue, buyer_approved, seller_approved, deal_completed').limit(1).single();
+                hasEnhancedColumns = !colError;
+                if (!hasMessagesTable || !hasEnhancedColumns) document.getElementById('setupBanner').style.display = 'block';
+            } catch (err) { console.warn('Database inspection deferred.'); }
+        }
+
+        function showSetupInstructions() {
+            alert("To enable premium features (Chat & Venues):\n1. Add columns to 'books': meeting_venue (text), buyer_approved (bool), seller_approved (bool), deal_completed (bool), seller_id (text).\n2. Create table 'messages' with columns: id, book_id, sender_id, sender_name, message, created_at.");
+        }
+
+        function dismissSetupBanner() { document.getElementById('setupBanner').style.display = 'none'; }
+
+        // ==========================================
+        // BOOK DATA ENGINE
+        // ==========================================
+        async function loadBooks() {
+            try {
+                let query = supabase.from('books').select('*').order('created_at', { ascending: false });
+                if (hasEnhancedColumns) query = query.or('deal_completed.is.null,deal_completed.eq.false');
+                const { data: books, error } = await query;
+                if (error) throw error;
+                displayBooks(books || []);
+            } catch (error) {
+                console.error('Data error:', error);
+                document.getElementById('productsGrid').innerHTML = '<p style="text-align: center; color: #ff5555; grid-column: 1/-1;">Marketplace sync failed.</p>';
+            }
+        }
+
+        function displayBooks(books) {
+            const grid = document.getElementById('productsGrid');
+            if (books.length === 0) {
+                grid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; padding: 100px;"><h4>No publications match your filter criteria.</h4></div>';
+                return;
+            }
+
+            grid.innerHTML = books.map(book => `
+                <div class="book-card" onclick="openProductDetail(${book.id})">
+                    <div class="card-image-box">
+                        <img src="${book.image || 'https://images.unsplash.com/photo-1544640808-32ca72ac7f37?auto=format&fit=crop&w=400'}" alt="${book.title}">
+                        <div class="price-badge">${book.price ? '₹' + book.price : 'Exchange'}</div>
+                    </div>
+                    <div class="book-info">
+                        <h4>${book.title}</h4>
+                        <p>${book.category || 'Academic Material'} • ${book.semester ? 'Sem ' + book.semester : 'All Sem'}</p>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // PRODUCT DETAIL SYSTEM
+        // ==========================================
+        async function openProductDetail(bookId) {
+            try {
+                const { data: book, error } = await supabase.from('books').select('*').eq('id', bookId).single();
+                if (error) throw error;
+                currentProduct = book;
+
+                let messages = [];
+                if (hasMessagesTable) {
+                    const { data: msgData } = await supabase.from('messages').select('*').eq('book_id', bookId).order('created_at', { ascending: true });
+                    messages = msgData || [];
+                }
+
+                displayProductDetail(book, messages);
+                document.getElementById('productModal').classList.add('show');
+                document.getElementById('productModal').style.opacity = '1';
+
+                if (hasMessagesTable) {
+                    if (chatRefreshInterval) clearInterval(chatRefreshInterval);
+                    chatRefreshInterval = setInterval(() => loadChatMessages(bookId), 3000);
+                }
+                lucide.createIcons();
+            } catch (error) { console.error('Error:', error); }
+        }
+
+        function displayProductDetail(book, messages) {
+            const isBuyer = currentUser !== (book.seller_id || 'unknown');
+            const buyerApproved = book.buyer_approved || false;
+            const sellerApproved = book.seller_approved || false;
+            const selectedVenue = book.meeting_venue || '';
+
+            document.getElementById('productDetail').innerHTML = `
+                <div class="product-detail">
+                    <div class="detail-image">
+                        <img src="${book.image || 'https://images.unsplash.com/photo-1544640808-32ca72ac7f37?auto=format&fit=crop&w=400'}" alt="${book.title}">
+                    </div>
+                    <div class="detail-info">
+                        <h2>${book.title}</h2>
+                        <div class="detail-price">₹${book.price || 'Market Swap'}</div>
+                        
+                        <div class="detail-meta">
+                            <div class="meta-item"><span class="meta-label">Category</span><span class="meta-value">${book.category || 'General'}</span></div>
+                            <div class="meta-item"><span class="meta-label">Semester</span><span class="meta-value">${book.semester || 'Any'}</span></div>
+                            <div class="meta-item"><span class="meta-label">Ownership</span><span class="meta-value">${book.seller || 'Member'}</span></div>
+                            <div class="meta-item"><span class="meta-label">State</span><span class="meta-value">${book.condition || 'Good'}</span></div>
+                        </div>
+
+                        ${book.description ? `<p style="opacity: 0.6; margin-bottom: 30px;">${book.description}</p>` : ''}
+
+                        <div class="venue-section">
+                            <h3><i data-lucide="map-pin" size="18"></i> Proposed Exchange Node</h3>
+                            <div class="venue-options">
+                                ${['Library', 'Cafeteria', 'Main Gate', 'Sports Complex', 'Parking Lot', 'Department'].map(v => `
+                                    <div class="venue-option ${selectedVenue === v ? 'selected' : ''}" onclick="selectVenue('${v}')">${v}</div>
+                                `).join('')}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="chat-section">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
+                            <h3><i data-lucide="message-square" size="18"></i> Comm-Link</h3>
+                            <span style="font-size: 12px; color: var(--aurora-green);">Encrypted Channel</span>
+                        </div>
+                        <div class="chat-messages" id="chatMessages">${displayMessages(messages)}</div>
+                        <div class="chat-input-container">
+                            <input type="text" class="chat-input" id="chatInput" placeholder="Enter transmission..." onkeypress="if(event.key==='Enter') sendMessage()">
+                            <button class="btn-premium" style="padding: 12px 24px;" onclick="sendMessage()">Transmit</button>
+                        </div>
+                    </div>
+
+                    <div class="deal-actions">
+                        <h3>Transaction Verification Protocol</h3>
+                        <p style="margin-bottom: 30px; opacity: 0.4; font-size: 14px;">Both nodes must verify for data completion</p>
+                        <div class="deal-status">
+                            <div><div class="status-icon ${buyerApproved ? 'approved' : ''}"><i data-lucide="${buyerApproved ? 'check' : 'clock'}" size="24"></i></div><span style="font-size: 12px;">Buyer: ${buyerApproved ? 'Verified' : 'Wait'}</span></div>
+                            <div><div class="status-icon ${sellerApproved ? 'approved' : ''}"><i data-lucide="${sellerApproved ? 'check' : 'clock'}" size="24"></i></div><span style="font-size: 12px;">Seller: ${sellerApproved ? 'Verified' : 'Wait'}</span></div>
+                        </div>
+                        <button class="btn-premium" onclick="approveDeal('${isBuyer ? 'buyer' : 'seller'}')" ${(isBuyer && buyerApproved) || (!isBuyer && sellerApproved) ? 'disabled' : ''}>
+                            ${(isBuyer && buyerApproved) || (!isBuyer && sellerApproved) ? 'Authorization Logged' : 'Verify Transaction'}
+                        </button>
+                        ${buyerApproved && sellerApproved ? '<h3 style="color: var(--aurora-green); margin-top: 30px;">TRANSFERS AUTHORIZED • ARCHIVING...</h3>' : ''}
+                    </div>
+                </div>
+            `;
+            lucide.createIcons();
+        }
+
+        // ==========================================
+        // FEATURE SUBSYSTEMS
+        // ==========================================
+        function displayMessages(messages) {
+            if (!messages || messages.length === 0) return '<p style="text-align: center; color: rgba(255,255,255,0.2); padding: 50px;">Awaiting communications...</p>';
+            return messages.map(msg => `
+                <div class="message ${msg.sender_id === currentUser ? 'my-message' : ''}">
+                    <div class="message-sender">${msg.sender_id === currentUser ? 'You' : 'External'}</div>
+                    <div class="message-text">${msg.message}</div>
+                </div>
+            `).join('');
+        }
+
+        async function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message || !currentProduct) return;
+            try {
+                const { error } = await supabase.from('messages').insert([{ book_id: currentProduct.id, sender_id: currentUser, sender_name: 'Scholar', message: message }]);
+                if (error) throw error;
+                input.value = '';
+                loadChatMessages(currentProduct.id);
+            } catch (err) { alert('Comm error: ' + err.message); }
+        }
+
+        async function loadChatMessages(bookId) {
+            const { data: messages } = await supabase.from('messages').select('*').eq('book_id', bookId).order('created_at', { ascending: true });
+            const cont = document.getElementById('chatMessages');
+            if (cont) { cont.innerHTML = displayMessages(messages || []); cont.scrollTop = cont.scrollHeight; }
+        }
+
+        async function selectVenue(v) {
+            try {
+                await supabase.from('books').update({ meeting_venue: v }).eq('id', currentProduct.id);
+                currentProduct.meeting_venue = v;
+                openProductDetail(currentProduct.id);
+            } catch (err) { alert('Protocol error: ' + err.message); }
+        }
+
+        async function approveDeal(role) {
+            const updateData = role === 'buyer' ? { buyer_approved: true } : { seller_approved: true };
+            try {
+                const { data, error } = await supabase.from('books').update(updateData).eq('id', currentProduct.id).select().single();
+                if (error) throw error;
+                if (data.buyer_approved && data.seller_approved) {
+                    await supabase.from('books').update({ deal_completed: true }).eq('id', currentProduct.id);
+                    alert('Sync Complete. Archiving Listing.');
+                    closeProductModal();
+                    loadBooks();
+                } else openProductDetail(currentProduct.id);
+            } catch (err) { alert('Auth error: ' + err.message); }
+        }
+
+        async function searchBooks() {
+            const q = document.getElementById('searchInput').value.trim();
+            if (!q) { loadBooks(); return; }
+            const { data } = await supabase.from('books').select('*').ilike('title', `%${q}%`);
+            displayBooks(data || []);
+        }
+
+        async function filterBooks() {
+            const category = document.getElementById('categoryFilter').value;
+            const semester = document.getElementById('semesterFilter').value;
+            const sort = document.getElementById('sortFilter').value;
+            let q = supabase.from('books').select('*');
+            if (category) q = q.eq('category', category);
+            if (semester) q = q.eq('semester', semester);
+            if (sort === 'price_low') q = q.order('price', { ascending: true });
+            else if (sort === 'price_high') q = q.order('price', { ascending: false });
+            else q = q.order('created_at', { ascending: false });
+            const { data } = await q;
+            displayBooks(data || []);
+        }
+
+        function closeProductModal() {
+            document.getElementById('productModal').classList.remove('show');
+            document.getElementById('productModal').style.opacity = '0';
+            if (chatRefreshInterval) clearInterval(chatRefreshInterval);
+        }
+
+        // INIT
+        window.addEventListener('DOMContentLoaded', async () => {
+            await checkDatabaseSetup();
+            loadBooks();
+        });
+    </script>
+</body>
+
+</html>

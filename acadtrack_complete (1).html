@@ -1,27 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AcadTrack - Track Your Academic Schedule</title>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
+    <link
+        href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+
     <!-- Supabase Library -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.39.3/dist/umd/supabase.js"></script>
-    
+
     <style>
         :root {
-            --teal-gradient-start: #7DD3C0;
-            --teal-gradient-end: #5DAFBE;
-            --card-bg: #f8f8f8;
-            --text-dark: #1a1a1a;
-            --text-muted: #666;
-            --sage-green: #7FA896;
-            --sage-green-dark: #6B9480;
-            --blue-primary: #6BA9D1;
-            --red-overdue: #E57373;
-            --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.08);
-            --shadow-hover: 0 8px 30px rgba(0, 0, 0, 0.15);
+            /* Unified Brand Colors */
+            --primary-start: #6366F1;
+            --primary-end: #8B5CF6;
+            --acadtrack-accent: #3B82F6;
+            --acadtrack-accent-dark: #2563EB;
+
+            /* Neutrals */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-tertiary: #F3F4F6;
+            --border-light: #E5E7EB;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-tertiary: #9CA3AF;
+
+            /* Shadows */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+
+            /* Spacing */
+            --space-1: 4px;
+            --space-2: 8px;
+            --space-3: 12px;
+            --space-4: 16px;
+            --space-6: 24px;
+            --space-8: 32px;
+            --space-12: 48px;
+            --space-16: 64px;
         }
 
         * {
@@ -31,16 +53,11 @@
         }
 
         body {
-            font-family: 'Outfit', sans-serif;
-            background: linear-gradient(135deg, var(--teal-gradient-start) 0%, var(--teal-gradient-end) 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
             min-height: 100vh;
-            padding: 20px;
-            animation: gradientShift 15s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%, 100% { filter: hue-rotate(0deg); }
-            50% { filter: hue-rotate(5deg); }
+            color: var(--text-primary);
+            line-height: 1.6;
         }
 
         .container {
@@ -50,41 +67,62 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Header */
         header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 30px;
-            animation: slideDown 0.8s ease-out;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-light);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow-sm);
+            animation: slideDown 0.6s ease-out;
         }
 
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: var(--space-4) var(--space-6);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .brand-section {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: var(--space-4);
         }
 
         .logo {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: var(--shadow-soft);
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: rotate(5deg) scale(1.05);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
         }
 
         .logo img {
@@ -93,19 +131,114 @@
             object-fit: cover;
         }
 
-        .brand h1 {
-            font-family: 'DM Serif Display', serif;
-            font-size: 2.5rem;
-            color: var(--text-dark);
-            margin-bottom: 5px;
-            letter-spacing: -0.5px;
+        .brand-text h1 {
+            font-size: 2rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--acadtrack-accent) 0%, var(--acadtrack-accent-dark) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: -1px;
+            line-height: 1;
         }
 
-        .brand p {
-            color: var(--text-dark);
-            font-size: 1rem;
-            font-weight: 400;
+        .brand-text p {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--acadtrack-accent) 0%, var(--acadtrack-accent-dark) 100%);
+            color: white;
+            padding: var(--space-16) var(--space-6);
+            position: relative;
+            overflow: hidden;
+            margin-bottom: var(--space-12);
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            animation: float 20s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-30px) rotate(5deg);
+            }
+        }
+
+        .hero-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero h2 {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: var(--space-4);
+            line-height: 1.1;
+            letter-spacing: -2px;
+        }
+
+        .hero p {
+            font-size: 1.25rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-bottom: var(--space-8);
+        }
+
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--space-6);
+            margin-top: var(--space-12);
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: var(--space-6);
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: var(--space-1);
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            font-weight: 600;
             opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .campus-badge {
@@ -130,94 +263,95 @@
         /* Navigation Tabs */
         .nav-tabs {
             display: flex;
-            gap: 5px;
-            margin-bottom: 20px;
-            background: rgba(255, 255, 255, 0.6);
-            padding: 5px;
-            border-radius: 12px;
+            gap: 8px;
+            margin-bottom: 32px;
+            background: white;
+            padding: 6px;
+            border-radius: 14px;
             width: fit-content;
-            animation: slideUp 0.8s ease-out 0.1s both;
-        }
-
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            box-shadow: var(--shadow-sm);
+            border: 1px solid var(--border-light);
         }
 
         .nav-tab {
-            padding: 12px 30px;
+            padding: 10px 24px;
             border: none;
             background: transparent;
             cursor: pointer;
-            font-family: 'Outfit', sans-serif;
-            font-size: 1rem;
-            font-weight: 500;
-            color: var(--text-dark);
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            font-family: inherit;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+            border-radius: 10px;
+            transition: all 0.2s ease;
         }
 
         .nav-tab.active {
-            background: var(--sage-green);
+            background: var(--acadtrack-accent);
             color: white;
-            box-shadow: 0 2px 10px rgba(127, 168, 150, 0.3);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .nav-tab:hover:not(.active) {
-            background: rgba(255, 255, 255, 0.8);
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
         }
 
         /* Search Bar */
         .search-container {
-            margin-bottom: 25px;
-            animation: slideUp 0.8s ease-out 0.2s both;
+            margin-bottom: 48px;
         }
 
         .search-bar {
             display: flex;
             align-items: center;
             background: white;
-            border-radius: 12px;
-            padding: 0 10px 0 25px;
-            box-shadow: var(--shadow-soft);
+            border-radius: 16px;
+            padding: 0 12px 0 24px;
+            box-shadow: var(--shadow-md);
+            border: 1px solid var(--border-light);
             transition: all 0.3s ease;
         }
 
         .search-bar:focus-within {
-            box-shadow: var(--shadow-hover);
+            box-shadow: var(--shadow-lg);
+            border-color: var(--acadtrack-accent);
             transform: translateY(-2px);
         }
 
         .search-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 15px;
-            opacity: 0.4;
+            width: 20px;
+            height: 20px;
+            margin-right: 16px;
+            color: var(--text-tertiary);
         }
 
         .search-bar input {
             flex: 1;
             border: none;
             outline: none;
-            padding: 18px 10px;
+            padding: 18px 0;
             font-size: 1rem;
-            font-family: 'Outfit', sans-serif;
+            font-family: inherit;
+            color: var(--text-primary);
             background: transparent;
         }
 
-        .search-btn {
-            background: var(--sage-green);
+        .add-btn {
+            background: linear-gradient(135deg, var(--acadtrack-accent), var(--acadtrack-accent-dark));
+            color: white;
             border: none;
-            border-radius: 8px;
-            padding: 15px 25px;
+            padding: 10px 24px;
+            border-radius: 10px;
+            font-weight: 700;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: white;
-            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
         }
 
-        .search-btn:hover {
-            background: var(--sage-green-dark);
+        .add-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
         }
 
         /* Stats Grid */
@@ -276,29 +410,39 @@
         }
 
         @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(30px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .section-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 24px;
         }
 
         .section-title {
             font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            font-family: 'DM Serif Display', serif;
+            font-weight: 800;
+            color: var(--text-primary);
+            letter-spacing: -0.5px;
         }
 
         .view-all {
-            color: var(--sage-green);
+            color: var(--acadtrack-accent);
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
             transition: all 0.3s ease;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .view-all:hover {
@@ -333,128 +477,101 @@
             gap: 15px;
         }
 
+        /* Task/Item Cards */
+        .item-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
         .task-item {
             display: flex;
             align-items: center;
-            gap: 15px;
-            padding: 15px;
-            background: var(--card-bg);
-            border-radius: 12px;
-            transition: all 0.3s ease;
+            gap: 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 16px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
+            border: 1px solid var(--border-light);
         }
 
         .task-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .task-item.completed {
-            opacity: 0.6;
-        }
-
-        .task-item.completed .item-title,
-        .task-item.completed .item-subject {
-            text-decoration: line-through;
+            transform: translateX(8px);
+            background: white;
+            box-shadow: var(--shadow-md);
+            border-color: var(--acadtrack-accent);
         }
 
         .task-checkbox {
             width: 24px;
             height: 24px;
-            border: 2px solid var(--sage-green);
-            border-radius: 6px;
+            border: 2px solid var(--border-light);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
             flex-shrink: 0;
+            background: white;
         }
 
-        .task-checkbox:hover {
-            background: rgba(127, 168, 150, 0.1);
+        .task-item:hover .task-checkbox {
+            border-color: var(--acadtrack-accent);
         }
 
         .task-checkbox.checked {
-            background: var(--sage-green);
+            background: var(--acadtrack-accent);
+            border-color: var(--acadtrack-accent);
             color: white;
-        }
-
-        .item-icon {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            flex-shrink: 0;
-        }
-
-        .item-content {
-            flex: 1;
         }
 
         .item-title {
             font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 4px;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 2px;
         }
 
         .item-subject {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-        }
-
-        .item-meta {
-            display: flex;
-            flex-direction: column;
-            align-items: flex-end;
-            gap: 5px;
-        }
-
-        .item-date {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            font-weight: 500;
-        }
-
-        .item-priority {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 0.75rem;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
             font-weight: 600;
         }
 
+        .item-date {
+            font-size: 0.75rem;
+            color: var(--text-tertiary);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
         .priority-high {
-            background: #FFE5E5;
-            color: #E57373;
+            background: #FEE2E2;
+            color: #DC2626;
         }
 
         .priority-medium {
-            background: #FFF8E1;
-            color: #FFB74D;
+            background: #FEF3C7;
+            color: #D97706;
         }
 
         .priority-low {
-            background: #E8F5E9;
-            color: #81C784;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-muted);
-            font-style: italic;
+            background: #ECFDF5;
+            color: #059669;
         }
 
         .view-all-link {
             text-align: center;
-            color: var(--sage-green);
-            margin-top: 15px;
+            color: var(--acadtrack-accent);
+            margin-top: 24px;
             cursor: pointer;
-            font-weight: 600;
+            font-weight: 700;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
             transition: all 0.3s ease;
         }
 
@@ -478,108 +595,60 @@
         }
 
         .calendar-month {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--text-dark);
-        }
-
-        .calendar-grid-container {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 20px;
-        }
-
-        .calendar-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .calendar-table th {
-            padding: 10px;
-            text-align: center;
-            color: var(--text-muted);
-            font-weight: 600;
-            font-size: 0.875rem;
-        }
-
-        .calendar-table td {
-            padding: 12px;
-            text-align: center;
-            position: relative;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
-        }
-
-        .calendar-table td:hover {
-            background: var(--card-bg);
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--text-primary);
         }
 
         .calendar-table td.today {
-            background: var(--sage-green);
+            background: var(--acadtrack-accent);
             color: white;
-            font-weight: 700;
-        }
-
-        .calendar-dot {
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            position: absolute;
-            bottom: 5px;
-            left: 50%;
-            transform: translateX(-50%);
+            font-weight: 800;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
         }
 
         .dot-red {
-            background: var(--red-overdue);
+            background: #EF4444;
         }
 
         .dot-blue {
-            background: var(--blue-primary);
+            background: var(--acadtrack-accent);
         }
 
         .dot-yellow {
-            background: #FFB74D;
-        }
-
-        /* Summary Sidebar */
-        .summary-sidebar {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
+            background: #F59E0B;
         }
 
         .summary-item {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 15px;
-            background: var(--card-bg);
+            padding: 16px;
+            background: var(--bg-secondary);
             border-radius: 12px;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            border: 1px solid var(--border-light);
         }
 
         .summary-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            background: white;
+            box-shadow: var(--shadow-sm);
         }
 
         .summary-number {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--text-dark);
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-primary);
             min-width: 40px;
         }
 
-        .summary-content {
-            flex: 1;
-        }
-
         .summary-label {
-            font-size: 0.875rem;
-            color: var(--text-muted);
-            margin-bottom: 4px;
+            font-size: 0.8125rem;
+            color: var(--text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .summary-count {
@@ -674,119 +743,81 @@
 
         .modal-content {
             background: white;
-            border-radius: 20px;
-            padding: 30px;
+            border-radius: 24px;
+            padding: 40px;
             max-width: 500px;
             width: 90%;
             max-height: 90vh;
             overflow-y: auto;
-            animation: modalSlideIn 0.3s ease-out;
-        }
-
-        @keyframes modalSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            animation: modalSlideIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: var(--shadow-2xl);
         }
 
         .modal-header {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 25px;
-            font-family: 'DM Serif Display', serif;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            letter-spacing: -0.5px;
         }
 
         .form-label {
             display: block;
             margin-bottom: 8px;
-            font-weight: 600;
-            color: var(--text-dark);
+            font-weight: 700;
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .form-input,
         .form-select,
         .form-textarea {
             width: 100%;
-            padding: 12px;
-            border: 2px solid #E0E0E0;
-            border-radius: 10px;
-            font-family: 'Outfit', sans-serif;
+            padding: 14px 16px;
+            border: 1px solid var(--border-light);
+            border-radius: 12px;
+            font-family: inherit;
             font-size: 1rem;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            background: var(--bg-secondary);
         }
 
         .form-input:focus,
         .form-select:focus,
         .form-textarea:focus {
             outline: none;
-            border-color: var(--sage-green);
-        }
-
-        .form-textarea {
-            resize: vertical;
-            min-height: 100px;
-        }
-
-        .modal-actions {
-            display: flex;
-            gap: 15px;
-            margin-top: 25px;
-        }
-
-        .btn {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Outfit', sans-serif;
+            border-color: var(--acadtrack-accent);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
         }
 
         .btn-primary {
-            background: var(--sage-green);
+            background: linear-gradient(135deg, var(--acadtrack-accent), var(--acadtrack-accent-dark));
             color: white;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
 
         .btn-primary:hover {
-            background: var(--sage-green-dark);
             transform: translateY(-2px);
-        }
-
-        .btn-secondary {
-            background: #E0E0E0;
-            color: var(--text-dark);
-        }
-
-        .btn-secondary:hover {
-            background: #CFCFCF;
+            box-shadow: 0 8px 16px rgba(59, 130, 246, 0.4);
         }
 
         .delete-btn {
-            background: var(--red-overdue);
+            background: #FEE2E2;
+            color: #DC2626;
             border: none;
-            padding: 8px 16px;
-            border-radius: 8px;
-            color: white;
-            font-weight: 600;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: 700;
             cursor: pointer;
-            transition: all 0.3s ease;
-            margin-left: auto;
+            transition: all 0.2s ease;
         }
 
         .delete-btn:hover {
-            background: #D32F2F;
+            background: #FECACA;
+            color: #991B1B;
             transform: translateY(-2px);
         }
 
@@ -806,30 +837,58 @@
         }
     </style>
 </head>
+
 <body>
-    <div class="container">
-        <!-- Header -->
-        <header>
+    <header>
+        <div class="header-container">
             <div class="brand-section">
                 <div class="logo">
-                    <img src="https://via.placeholder.com/80" alt="AcadTrack Logo">
+                    <img src="campus.JPG" alt="AcadTrack Logo">
                 </div>
-                <div class="brand">
+                <div class="brand-text">
                     <h1>AcadTrack</h1>
-                    <p>Track assignments, exams, and semesters seamlessly</p>
+                    <p>Stay On Top of Your Academic Journey</p>
                 </div>
             </div>
-            <div class="campus-badge">
-                <svg class="campus-icon" fill="currentColor" viewBox="0 0 20 20">
-                    <path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"/>
-                </svg>
-                Campus Mitra
+            <div class="header-actions">
+                <a href="index.html" class="btn btn-secondary"
+                    style="display: flex; align-items: center; gap: 8px; text-decoration: none; padding: 10px 20px; border-radius: 10px; background: var(--bg-secondary); color: var(--text-primary); border: 1px solid var(--border-light); font-weight: 600; transition: all 0.3s ease; width: auto; flex: none;">
+                    <svg style="width: 20px; height: 20px;" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                    </svg>
+                    Home
+                </a>
             </div>
-        </header>
+        </div>
+    </header>
 
+    <section class="hero">
+        <div class="hero-container">
+            <h2>Your Academic Success, Simplified.</h2>
+            <p>Track assignments, manage exams, and never miss a deadline. AcadTrack helps you stay ahead of your
+                schedule.</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value" id="statsActiveTasks">0</div>
+                    <div class="stat-label">Active Tasks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="statsUpcomingExams">0</div>
+                    <div class="stat-label">Upcoming Exams</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">A+</div>
+                    <div class="stat-label">Target GPA</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="container" style="padding: 0 var(--space-6);">
         <!-- Navigation Tabs -->
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showTab('all')">All</button>
+            <button class="nav-tab active" onclick="showTab('all')">All Tasks</button>
             <button class="nav-tab" onclick="showTab('assignments')">Assignments</button>
             <button class="nav-tab" onclick="showTab('exams')">Exams</button>
         </div>
@@ -838,10 +897,14 @@
         <div class="search-container">
             <div class="search-bar">
                 <svg class="search-icon" fill="currentColor" viewBox="0 0 20 20">
-                    <path fill-rule="evenodd" d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z" clip-rule="evenodd"/>
+                    <path fill-rule="evenodd"
+                        d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
+                        clip-rule="evenodd" />
                 </svg>
-                <input type="text" id="searchInput" placeholder="Search for assignments, exams, or subjects..." onkeyup="searchTasks()">
-                <button class="search-btn" onclick="searchTasks()">Search</button>
+                <input type="text" id="searchInput" placeholder="Search for assignments, exams, or subjects..."
+                    onkeyup="searchTasks()">
+                <button class="add-btn" onclick="openModal('addAssignment')" style="margin-left: auto;">+ New
+                    Task</button>
             </div>
         </div>
 
@@ -871,7 +934,9 @@
                         <div class="section-title">Assignments</div>
                         <button class="add-btn" onclick="openAddModal('Assignment')">
                             <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd"
+                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                    clip-rule="evenodd" />
                             </svg>
                             Add
                         </button>
@@ -887,7 +952,9 @@
                         <div class="section-title">Exams</div>
                         <button class="add-btn" onclick="openAddModal('Exam')">
                             <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd"
+                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                    clip-rule="evenodd" />
                             </svg>
                             Add
                         </button>
@@ -944,7 +1011,9 @@
 
                         <button class="add-btn" style="width: 100%;" onclick="openAddModal('Assignment')">
                             <svg width="20" height="20" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z" clip-rule="evenodd"/>
+                                <path fill-rule="evenodd"
+                                    d="M10 5a1 1 0 011 1v3h3a1 1 0 110 2h-3v3a1 1 0 11-2 0v-3H6a1 1 0 110-2h3V6a1 1 0 011-1z"
+                                    clip-rule="evenodd" />
                             </svg>
                             Add Task
                         </button>
@@ -973,7 +1042,7 @@
                     <label class="form-label">Title *</label>
                     <input type="text" class="form-input" id="taskTitle" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">Subject *</label>
                     <input type="text" class="form-input" id="taskSubject" required>
@@ -1020,12 +1089,12 @@
             <div class="modal-header">Edit Task</div>
             <form id="editTaskForm">
                 <input type="hidden" id="editTaskId">
-                
+
                 <div class="form-group">
                     <label class="form-label">Title *</label>
                     <input type="text" class="form-input" id="editTaskTitle" required>
                 </div>
-                
+
                 <div class="form-group">
                     <label class="form-label">Subject *</label>
                     <input type="text" class="form-input" id="editTaskSubject" required>
@@ -1073,7 +1142,7 @@
         // ==========================================
         const SUPABASE_URL = 'https://geqvoshwilllvjuepbfg.supabase.co'
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdlcXZvc2h3aWxsbHZqdWVwYmZnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzAxMDc3MzUsImV4cCI6MjA4NTY4MzczNX0.AGYzSZYxViV8tuiPQCMmVU4LnfLRqlwY3eHoJ5lM4Ow'
-        
+
         const { createClient } = supabase
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
@@ -1125,7 +1194,7 @@
 
         function displayTaskList(tasks, elementId, emoji) {
             const container = document.getElementById(elementId)
-            
+
             if (tasks.length === 0) {
                 container.innerHTML = '<div class="empty-state">No tasks yet</div>'
                 return
@@ -1134,7 +1203,7 @@
             container.innerHTML = tasks.map(task => {
                 const dueDate = new Date(task.due_date)
                 const formattedDate = dueDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
-                
+
                 const iconColors = {
                     'High': 'linear-gradient(135deg, #FFB6B9 0%, #FFA5A9 100%)',
                     'Medium': 'linear-gradient(135deg, #FFE5B4 0%, #FFD89B 100%)',
@@ -1173,15 +1242,15 @@
             // Update weekly stats
             const today = new Date()
             const nextWeek = new Date(today.getTime() + 7 * 24 * 60 * 60 * 1000)
-            
+
             const thisWeekTasks = tasks.filter(t => {
                 const taskDate = new Date(t.due_date)
                 return taskDate >= today && taskDate <= nextWeek && !t.completed
             })
 
-            document.getElementById('upcomingAssignments').textContent = 
+            document.getElementById('upcomingAssignments').textContent =
                 thisWeekTasks.filter(t => t.type === 'Assignment').length
-            document.getElementById('upcomingExams').textContent = 
+            document.getElementById('upcomingExams').textContent =
                 thisWeekTasks.filter(t => t.type === 'Exam').length
         }
 
@@ -1223,12 +1292,12 @@
                     } else {
                         const isToday = dayCounter === now.getDate()
                         const todayClass = isToday ? 'today' : ''
-                        
+
                         let dotHTML = ''
                         if (tasksByDate[dayCounter]) {
                             const hasAssignment = tasksByDate[dayCounter].some(t => t.type === 'Assignment')
                             const hasExam = tasksByDate[dayCounter].some(t => t.type === 'Exam')
-                            
+
                             if (hasAssignment) {
                                 dotHTML += '<span class="calendar-dot dot-red"></span>'
                             }
@@ -1236,7 +1305,7 @@
                                 dotHTML += '<span class="calendar-dot dot-blue"></span>'
                             }
                         }
-                        
+
                         calendarHTML += `<td class="${todayClass}">${dayCounter}${dotHTML}</td>`
                         dayCounter++
                     }
@@ -1254,7 +1323,7 @@
         function updatePastDue(tasks) {
             const today = new Date()
             today.setHours(0, 0, 0, 0)
-            
+
             const overdueTasks = tasks.filter(t => {
                 const taskDate = new Date(t.due_date)
                 return taskDate < today && !t.completed
@@ -1274,7 +1343,7 @@
                 const dueDate = new Date(task.due_date)
                 const today = new Date()
                 const daysOverdue = Math.floor((today - dueDate) / (1000 * 60 * 60 * 24))
-                
+
                 const iconColors = {
                     'High': 'linear-gradient(135deg, #FFB6B9 0%, #FFA5A9 100%)',
                     'Medium': 'linear-gradient(135deg, #FFE5B4 0%, #FFD89B 100%)',
@@ -1303,7 +1372,7 @@
         // ==========================================
         function searchTasks() {
             const searchTerm = document.getElementById('searchInput').value.toLowerCase()
-            
+
             if (!searchTerm) {
                 displayTasks(allTasks)
                 return
@@ -1311,8 +1380,8 @@
 
             const filtered = allTasks.filter(task => {
                 return task.title.toLowerCase().includes(searchTerm) ||
-                       task.subject.toLowerCase().includes(searchTerm) ||
-                       (task.description && task.description.toLowerCase().includes(searchTerm))
+                    task.subject.toLowerCase().includes(searchTerm) ||
+                    (task.description && task.description.toLowerCase().includes(searchTerm))
             })
 
             displayTasks(filtered)
@@ -1462,7 +1531,7 @@
         // ==========================================
         function showTab(filter) {
             currentFilter = filter
-            
+
             // Update active tab
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 tab.classList.remove('active')
@@ -1492,4 +1561,5 @@
         })
     </script>
 </body>
+
 </html>

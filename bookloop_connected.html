@@ -13,38 +13,31 @@
 
     <style>
         :root {
-            /* Unified Brand Colors */
-            --primary-start: #6366F1;
-            --primary-end: #8B5CF6;
-            --bookloop-accent: #10B981;
-            --bookloop-accent-dark: #059669;
+            /* SaaS Theme - Emerald & Slate */
+            --primary: #10B981;
+            --primary-dark: #059669;
+            --primary-light: #D1FAE5;
 
-            /* Neutrals */
-            --bg-primary: #FFFFFF;
-            --bg-secondary: #F9FAFB;
-            --bg-tertiary: #F3F4F6;
-            --border-light: #E5E7EB;
-            --border-medium: #D1D5DB;
-            --text-primary: #1F2937;
-            --text-secondary: #6B7280;
-            --text-tertiary: #9CA3AF;
+            --slate-50: #F8FAFC;
+            --slate-100: #F1F5F9;
+            --slate-200: #E2E8F0;
+            --slate-400: #94A3B8;
+            --slate-800: #1E293B;
+            --slate-900: #0F172A;
 
-            /* Shadows */
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-            --shadow-2xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            --bg-canvas: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --border-subtle: #E2E8F0;
 
-            /* Spacing */
-            --space-1: 4px;
-            --space-2: 8px;
-            --space-3: 12px;
-            --space-4: 16px;
-            --space-6: 24px;
-            --space-8: 32px;
-            --space-12: 48px;
-            --space-16: 64px;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+
+            --radius-xl: 24px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+
+            --shadow-float: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            --shadow-glass: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
 
         * {
@@ -54,758 +47,522 @@
         }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #F9FAFB 0%, #F3F4F6 100%);
+            font-family: 'Inter', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-canvas);
+            color: var(--text-main);
             min-height: 100vh;
-            color: var(--text-primary);
-            line-height: 1.6;
+            display: flex;
         }
 
-        /* Header */
-        header {
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border-light);
-            position: sticky;
+        /* SaaS Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--slate-900);
+            color: white;
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            position: fixed;
+            height: 100vh;
+            left: 0;
             top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow-sm);
-            animation: slideDown 0.6s ease-out;
+            z-index: 1000;
         }
 
-        @keyframes slideDown {
-            from {
-                opacity: 0;
-                transform: translateY(-20px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .header-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--space-4) var(--space-6);
+        .sidebar-brand {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            gap: var(--space-6);
+            gap: 12px;
+            margin-bottom: 48px;
+            padding: 0 8px;
         }
 
-        .brand-section {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-        }
-
-        .logo {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05) rotate(2deg);
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
+        .sidebar-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
             object-fit: cover;
         }
 
-        .brand-text h1 {
+        .sidebar-brand h1 {
             font-size: 1.5rem;
             font-weight: 800;
-            background: linear-gradient(135deg, var(--bookloop-accent), var(--bookloop-accent-dark));
+            background: linear-gradient(135deg, #FFF, #D1FAE5);
             -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 2px;
+            -webkit-text-fill-color: transparent;
         }
 
-        .brand-text p {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-            font-weight: 500;
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
-        .header-actions {
+        .nav-item {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-        }
-
-        .btn {
-            padding: 10px 20px;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: none;
-            display: inline-flex;
-            align-items: center;
-            gap: var(--space-2);
+            gap: 12px;
+            padding: 12px 16px;
+            border-radius: 12px;
+            color: var(--slate-200);
             text-decoration: none;
-            font-family: inherit;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--bookloop-accent), var(--bookloop-accent-dark));
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: var(--shadow-lg);
-        }
-
-        .btn-secondary {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: 1px solid var(--border-light);
-        }
-
-        .btn-secondary:hover {
-            background: var(--bg-tertiary);
-        }
-
-        .btn svg {
-            width: 18px;
-            height: 18px;
-        }
-
-        /* Hero Section */
-        .hero {
-            background: linear-gradient(135deg, var(--bookloop-accent) 0%, var(--bookloop-accent-dark) 100%);
-            color: white;
-            padding: var(--space-16) var(--space-6);
-            position: relative;
-            overflow: hidden;
-            animation: fadeIn 0.8s ease-out;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-
-            to {
-                opacity: 1;
-            }
-        }
-
-        .hero::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            right: -20%;
-            width: 600px;
-            height: 600px;
-            background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
-            border-radius: 50%;
-            animation: float 20s ease-in-out infinite;
-        }
-
-        @keyframes float {
-
-            0%,
-            100% {
-                transform: translateY(0) rotate(0deg);
-            }
-
-            50% {
-                transform: translateY(-30px) rotate(5deg);
-            }
-        }
-
-        .hero-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-
-        .hero-content {
-            max-width: 700px;
-        }
-
-        .hero h2 {
-            font-size: 3rem;
-            font-weight: 900;
-            margin-bottom: var(--space-4);
-            line-height: 1.1;
-            animation: slideUp 0.8s ease-out 0.2s both;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .hero p {
-            font-size: 1.25rem;
-            opacity: 0.95;
-            margin-bottom: var(--space-8);
-            animation: slideUp 0.8s ease-out 0.3s both;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-6);
-            margin-top: var(--space-12);
-            animation: slideUp 0.8s ease-out 0.4s both;
-        }
-
-        .stat-card {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: var(--space-6);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .stat-card:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-5px);
-        }
-
-        .stat-value {
-            font-size: 2.5rem;
-            font-weight: 900;
-            margin-bottom: var(--space-2);
-        }
-
-        .stat-label {
-            font-size: 0.875rem;
-            opacity: 0.9;
             font-weight: 500;
+            transition: all 0.2s ease;
+            cursor: pointer;
         }
 
-        /* Main Container */
-        .container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: var(--space-8) var(--space-6);
+        .nav-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
         }
 
-        /* Search Section */
-        .search-section {
-            margin-bottom: var(--space-8);
-            animation: slideUp 0.8s ease-out 0.5s both;
+        .nav-item.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
         }
 
-        .search-wrapper {
-            background: var(--bg-primary);
-            border-radius: 16px;
-            padding: var(--space-2);
-            box-shadow: var(--shadow-lg);
+        /* Main Content Canvas */
+        .main-canvas {
+            flex: 1;
+            margin-left: 280px;
+            padding: 40px;
+            width: calc(100% - 280px);
+        }
+
+        /* Marketplace Header */
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+
+        .greeting h2 {
+            font-size: 2rem;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .top-actions {
             display: flex;
             align-items: center;
-            gap: var(--space-3);
-            transition: all 0.3s ease;
+            gap: 16px;
         }
 
-        .search-wrapper:focus-within {
-            box-shadow: var(--shadow-xl);
-            transform: translateY(-2px);
-        }
-
-        .search-icon {
-            width: 24px;
-            height: 24px;
-            color: var(--text-tertiary);
-            margin-left: var(--space-4);
+        /* Pro Search */
+        .search-container {
+            position: relative;
+            width: 400px;
         }
 
         .search-input {
-            flex: 1;
-            border: none;
-            outline: none;
-            padding: var(--space-4);
-            font-size: 1rem;
+            width: 100%;
+            padding: 14px 20px 14px 48px;
+            background: white;
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-md);
             font-family: inherit;
-            background: transparent;
+            font-size: 0.95rem;
+            box-shadow: var(--shadow-glass);
+            transition: all 0.2s ease;
         }
 
-        .search-input::placeholder {
-            color: var(--text-tertiary);
-        }
-
-        .filter-toggle {
-            background: var(--bg-secondary);
-            border: 1px solid var(--border-light);
-            padding: 10px 16px;
-            border-radius: 10px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: var(--space-2);
-            font-weight: 600;
-            font-size: 0.875rem;
-            transition: all 0.3s ease;
-        }
-
-        .filter-toggle:hover {
-            background: var(--bg-tertiary);
-        }
-
-        /* Filters Panel */
-        .filters-panel {
-            background: var(--bg-primary);
-            border-radius: 16px;
-            padding: var(--space-6);
-            margin-bottom: var(--space-6);
-            box-shadow: var(--shadow-md);
-            display: none;
-            animation: slideDown 0.3s ease-out;
-        }
-
-        .filters-panel.active {
-            display: block;
-        }
-
-        .filters-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: var(--space-4);
-        }
-
-        .filter-group label {
-            display: block;
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-secondary);
-            margin-bottom: var(--space-2);
-        }
-
-        .filter-select {
-            width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border-light);
-            border-radius: 10px;
-            font-family: inherit;
-            font-size: 0.875rem;
-            background: var(--bg-primary);
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-
-        .filter-select:focus {
+        .search-input:focus {
             outline: none;
-            border-color: var(--bookloop-accent);
-            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
         }
 
-        /* Products Grid */
-        .products-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: var(--space-6);
-        }
-
-        .products-header h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: var(--space-6);
-            animation: fadeInUp 0.8s ease-out 0.6s both;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(40px);
-            }
-
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        /* Product Card */
-        .product-card {
-            background: var(--bg-primary);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-            transition: all 0.3s ease;
-            cursor: pointer;
-        }
-
-        .product-card:hover {
-            transform: translateY(-8px);
-            box-shadow: var(--shadow-2xl);
-        }
-
-        .product-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(135deg, #F3F4F6 0%, #E5E7EB 100%);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .product-image img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.5s ease;
-        }
-
-        .product-card:hover .product-image img {
-            transform: scale(1.1);
-        }
-
-        .price-badge {
+        .search-icon {
             position: absolute;
-            top: var(--space-3);
-            right: var(--space-3);
-            background: linear-gradient(135deg, var(--bookloop-accent), var(--bookloop-accent-dark));
-            color: white;
-            padding: 8px 16px;
-            border-radius: 8px;
-            font-weight: 700;
-            font-size: 1.125rem;
-            box-shadow: var(--shadow-lg);
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
         }
 
-        .product-content {
-            padding: var(--space-4);
+        /* Market Grid */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 24px;
         }
 
-        .product-title {
+        /* Pro Book Card */
+        .book-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border-subtle);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .book-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-float);
+            border-color: var(--primary-light);
+        }
+
+        .book-cover {
+            height: 200px;
+            background: linear-gradient(135deg, var(--slate-100), var(--slate-200));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .book-cover i {
+            font-size: 4rem;
+            color: var(--slate-400);
+        }
+
+        .badge-status {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 6px 12px;
+            border-radius: 100px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            backdrop-filter: blur(8px);
+        }
+
+        .status-available {
+            background: rgba(16, 185, 129, 0.1);
+            color: #059669;
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+
+        .book-content {
+            padding: 24px;
+        }
+
+        .book-title {
             font-size: 1.125rem;
             font-weight: 700;
-            color: var(--text-primary);
-            margin-bottom: var(--space-3);
-            line-height: 1.4;
+            margin-bottom: 4px;
+            color: var(--slate-900);
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 1;
+            line-clamp: 1;
             -webkit-box-orient: vertical;
             overflow: hidden;
         }
 
-        .product-meta {
-            display: flex;
-            align-items: center;
-            gap: var(--space-4);
-            margin-bottom: var(--space-3);
+        .book-meta {
             font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .meta-item {
+            color: var(--text-muted);
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
-            gap: var(--space-1);
+            gap: 8px;
         }
 
-        .meta-item svg {
-            width: 16px;
-            height: 16px;
-        }
-
-        .product-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding-top: var(--space-3);
-            border-top: 1px solid var(--border-light);
-        }
-
-        .seller-info {
+        .book-owner {
             display: flex;
             align-items: center;
-            gap: var(--space-2);
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 1px solid var(--slate-100);
         }
 
-        .avatar {
+        .owner-avatar {
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: linear-gradient(135deg, var(--bookloop-accent), var(--bookloop-accent-dark));
+            background: var(--primary-light);
+            color: var(--primary-dark);
             display: flex;
             align-items: center;
             justify-content: center;
-            color: white;
             font-weight: 700;
             font-size: 0.75rem;
         }
 
-        .seller-name {
-            font-size: 0.875rem;
-            font-weight: 600;
-            color: var(--text-primary);
+        .owner-info {
+            flex: 1;
         }
 
-        .category-badge {
-            background: var(--bg-secondary);
-            color: var(--text-secondary);
-            padding: 4px 12px;
-            border-radius: 6px;
+        .owner-name {
+            font-size: 0.8125rem;
+            font-weight: 600;
+            color: var(--slate-900);
+            display: block;
+        }
+
+        .owner-college {
             font-size: 0.75rem;
-            font-weight: 600;
+            color: var(--text-muted);
         }
 
-        /* Empty State */
+        /* Buttons */
+        .btn-action {
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.875rem;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            box-shadow: 0 4px 14px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(16, 185, 129, 0.4);
+        }
+
+        .btn-secondary {
+            background: var(--slate-100);
+            color: var(--slate-600);
+        }
+
+        .btn-secondary:hover {
+            background: var(--slate-200);
+            color: var(--slate-900);
+        }
+
+        /* Swaps Dashboard View */
+        .swaps-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .swap-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .swap-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .swap-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--slate-900);
+        }
+
+        /* Success/Error Alerts */
+        .alert {
+            padding: 16px 24px;
+            border-radius: 12px;
+            margin-bottom: 24px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .error-alert {
+            background: #FEE2E2;
+            color: #991B1B;
+            border: 1px solid #FECACA;
+        }
+
+        .success-alert {
+            background: #ECFDF5;
+            color: #065F46;
+            border: 1px solid #D1FAE5;
+        }
+
+        /* Loader */
+        .loader {
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Empty States */
         .empty-state {
             text-align: center;
-            padding: var(--space-16) var(--space-6);
+            padding: 60px 40px;
             grid-column: 1 / -1;
         }
 
         .empty-icon {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto var(--space-6);
-            opacity: 0.3;
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            opacity: 0.2;
+            color: var(--slate-400);
         }
 
-        .empty-state h3 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: var(--space-3);
+        /* Hide Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
         }
 
-        .empty-state p {
-            color: var(--text-secondary);
-            margin-bottom: var(--space-6);
+        ::-webkit-scrollbar-track {
+            background: var(--bg-canvas);
         }
 
-        /* Loading Skeleton */
-        .skeleton-card {
-            background: var(--bg-primary);
-            border-radius: 16px;
-            overflow: hidden;
-            box-shadow: var(--shadow-md);
-        }
-
-        .skeleton-image {
-            width: 100%;
-            height: 200px;
-            background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-        }
-
-        @keyframes shimmer {
-            0% {
-                background-position: -200% 0;
-            }
-
-            100% {
-                background-position: 200% 0;
-            }
-        }
-
-        .skeleton-content {
-            padding: var(--space-4);
-        }
-
-        .skeleton-line {
-            height: 16px;
-            background: linear-gradient(90deg, #F3F4F6 25%, #E5E7EB 50%, #F3F4F6 75%);
-            background-size: 200% 100%;
-            animation: shimmer 1.5s infinite;
-            border-radius: 4px;
-            margin-bottom: var(--space-2);
-        }
-
-        .skeleton-line.title {
-            height: 24px;
-            width: 80%;
-        }
-
-        .skeleton-line.short {
-            width: 60%;
-        }
-
-        /* Responsive */
-        @media (max-width: 768px) {
-            .hero h2 {
-                font-size: 2rem;
-            }
-
-            .hero p {
-                font-size: 1rem;
-            }
-
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .products-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .header-actions {
-                flex-wrap: wrap;
-            }
+        ::-webkit-scrollbar-thumb {
+            background: var(--slate-200);
+            border-radius: 10px;
         }
     </style>
 </head>
 
 <body>
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <div class="brand-section">
-                <div class="logo">
-                    <img src="book_loop.JPG" alt="BookLoop">
-                </div>
-                <div class="brand-text">
-                    <h1>BookLoop</h1>
-                    <p>Student Marketplace</p>
-                </div>
-            </div>
-            <div class="header-actions">
-                <a href="index.html" class="btn btn-secondary">
-                    <svg fill="currentColor" viewBox="0 0 20 20">
-                        <path
-                            d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z" />
-                    </svg>
-                    Home
-                </a>
-            </div>
+    <!-- SaaS Sidebar -->
+    <aside class="sidebar">
+        <div class="sidebar-brand">
+            <img src="campus.JPG" alt="Campus Mitra" class="sidebar-logo">
+            <h1>BookLoop</h1>
         </div>
-    </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <h2>Buy & Sell Study Materials</h2>
-                <p>Your campus marketplace for books, notes, and supplies. Save money, help others, and reduce waste.
-                </p>
-            </div>
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-value" id="totalListings">0</div>
-                    <div class="stat-label">Active Listings</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="totalSellers">0</div>
-                    <div class="stat-label">Sellers</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-value" id="avgSavings">0%</div>
-                    <div class="stat-label">Avg. Savings</div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Main Container -->
-    <div class="container">
-        <!-- Search Section -->
-        <div class="search-section">
-            <div class="search-wrapper">
-                <svg class="search-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <nav class="sidebar-nav">
+            <a href="#" class="nav-item active" id="nav-explore" onclick="switchView('explore')">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
-                <input type="text" class="search-input" id="searchInput" placeholder="Search by material name...">
-                <button class="filter-toggle" onclick="toggleFilters()">
+                Explore Market
+            </a>
+            <a href="#" class="nav-item" id="nav-myshelf" onclick="switchView('myshelf')">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 13.04a11.96 11.96 0 014.5-1.29c1.67 0 3.102.633 4.5 1.253z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13c1.168-1.776 2.754-2.253 4.5-2.253s3.168.477 4.5 1.253a11.96 11.96 0 01-4.5 1.253c-1.67 0-3.102-.633-4.5-1.253z" />
+                </svg>
+                My Shelf
+            </a>
+            <a href="#" class="nav-item" id="nav-swaps" onclick="switchView('swaps')">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" />
+                </svg>
+                Requests
+            </a>
+        </nav>
+
+        <div class="sidebar-footer" style="margin-top: auto;">
+            <a href="index.html" class="nav-item">
+                <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                </svg>
+                Back to Home
+            </a>
+        </div>
+    </aside>
+
+    <!-- Dashboard Canvas -->
+    <main class="main-canvas">
+        <div class="top-bar">
+            <div class="greeting">
+                <h2 id="userName">Hello, Scholar!</h2>
+                <p>Find your next read or share your collection.</p>
+            </div>
+            <div class="top-actions">
+                <div class="search-container">
+                    <svg class="search-icon" width="20" height="20" fill="none" stroke="currentColor"
+                        viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                    <input type="text" class="search-input" id="bookSearch"
+                        placeholder="Search title, author, or category..." onkeyup="handleSearch()">
+                </div>
+                <button class="btn-action btn-primary" onclick="openAddModal()">
                     <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                     </svg>
-                    Filters
+                    List a Book
                 </button>
-                <button class="btn btn-primary" onclick="searchBooks()">Search</button>
             </div>
         </div>
 
-        <!-- Filters Panel -->
-        <div class="filters-panel" id="filtersPanel">
-            <div class="filters-grid">
-                <div class="filter-group">
-                    <label>Category</label>
-                    <select class="filter-select" id="categoryFilter" onchange="filterBooks()">
-                        <option value="">All categories</option>
-                        <option value="Books">Books</option>
-                        <option value="Notes">Notes</option>
-                        <option value="Supplies">Supplies</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Semester</label>
-                    <select class="filter-select" id="semesterFilter" onchange="filterBooks()">
-                        <option value="">All Semesters</option>
-                        <option value="1">Semester 1</option>
-                        <option value="2">Semester 2</option>
-                        <option value="3">Semester 3</option>
-                        <option value="4">Semester 4</option>
-                        <option value="5">Semester 5</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Sort By</label>
-                    <select class="filter-select" id="sortFilter" onchange="filterBooks()">
-                        <option value="newest">Newest</option>
-                        <option value="price_low">Price: Low to High</option>
-                        <option value="price_high">Price: High to Low</option>
-                    </select>
-                </div>
+        <!-- System Alerts -->
+        <div id="alertBox" class="alert">
+            <span id="alertIcon"></span>
+            <div style="flex: 1;">
+                <div id="alertTitle" style="font-weight: 800; font-size: 0.875rem;"></div>
+                <div id="alertMessage" style="font-size: 0.8125rem;"></div>
             </div>
         </div>
 
-        <!-- Products Section -->
-        <div class="products-header">
-            <h3>All Listings</h3>
+        <!-- View: Explore Market -->
+        <div id="view-explore" class="dashboard-view active">
+            <div class="market-grid" id="marketGrid">
+                <!-- Dynamic Content -->
+            </div>
         </div>
 
-        <div class="products-grid" id="productsGrid">
-            <!-- Loading skeletons -->
-            <div class="skeleton-card">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-content">
-                    <div class="skeleton-line title"></div>
-                    <div class="skeleton-line"></div>
-                    <div class="skeleton-line short"></div>
-                </div>
+        <!-- View: My Shelf -->
+        <div id="view-myshelf" class="dashboard-view" style="display: none;">
+            <div class="market-grid" id="shelfGrid">
+                <!-- Dynamic Content -->
             </div>
-            <div class="skeleton-card">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-content">
-                    <div class="skeleton-line title"></div>
-                    <div class="skeleton-line"></div>
-                    <div class="skeleton-line short"></div>
+        </div>
+
+        <!-- View: Swaps -->
+        <div id="view-swaps" class="dashboard-view" style="display: none;">
+            <div class="swaps-grid">
+                <div class="swap-card">
+                    <div class="swap-header">
+                        <h3 class="swap-title">Incoming Requests</h3>
+                    </div>
+                    <div id="incomingSwaps" class="swap-list">
+                        <!-- Dynamic Content -->
+                    </div>
                 </div>
-            </div>
-            <div class="skeleton-card">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-content">
-                    <div class="skeleton-line title"></div>
-                    <div class="skeleton-line"></div>
-                    <div class="skeleton-line short"></div>
+                <div class="swap-card">
+                    <div class="swap-header">
+                        <h3 class="swap-title">My Outgoing Swaps</h3>
+                    </div>
+                    <div id="outgoingSwaps" class="swap-list">
+                        <!-- Dynamic Content -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
     <script>
         // Supabase Setup
@@ -815,172 +572,156 @@
         const { createClient } = supabase
         const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
 
-        // Toggle Filters
-        function toggleFilters() {
-            const panel = document.getElementById('filtersPanel')
-            panel.classList.toggle('active')
+        let allBooks = [];
+        let currentUserId = 'user1'; // Placeholder
+
+        // View Orchestration
+        function switchView(viewId) {
+            document.querySelectorAll('.dashboard-view').forEach(v => v.style.display = 'none');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+
+            document.getElementById(`view-${viewId}`).style.display = 'block';
+            document.getElementById(`nav-${viewId}`).classList.add('active');
+
+            if (viewId === 'explore') renderMarket(allBooks);
+            if (viewId === 'myshelf') renderShelf();
+            if (viewId === 'swaps') renderSwaps();
         }
 
-        // Load Books
+        // Search & Filter
+        function handleSearch() {
+            const term = document.getElementById('bookSearch').value.toLowerCase();
+            const filtered = allBooks.filter(b =>
+                b.title.toLowerCase().includes(term) ||
+                (b.author && b.author.toLowerCase().includes(term)) ||
+                b.category.toLowerCase().includes(term)
+            );
+            renderMarket(filtered);
+        }
+
+        // Data Loading
         async function loadBooks() {
-            try {
-                const { data: books, error } = await supabaseClient
-                    .from('books')
-                    .select('*')
-                    .order('created_at', { ascending: false })
-
-                if (error) throw error
-
-                updateStats(books)
-                displayBooks(books)
-            } catch (error) {
-                console.error('Error loading books:', error)
-                document.getElementById('productsGrid').innerHTML = `
-                    <div class="empty-state">
-                        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-                        </svg>
-                        <h3>Error Loading Listings</h3>
-                        <p>Please check your connection and try again.</p>
-                    </div>
-                `
-            }
-        }
-
-        // Update Stats
-        function updateStats(books) {
-            const totalListings = books.length
-            const uniqueSellers = new Set(books.map(b => b.seller)).size
-            const avgSavings = 30 // Placeholder
-
-            animateValue('totalListings', 0, totalListings, 1000)
-            animateValue('totalSellers', 0, uniqueSellers, 1000)
-            animateValue('avgSavings', 0, avgSavings, 1000, '%')
-        }
-
-        function animateValue(id, start, end, duration, suffix = '') {
-            const element = document.getElementById(id)
-            const range = end - start
-            const increment = range / (duration / 16)
-            let current = start
-
-            const timer = setInterval(() => {
-                current += increment
-                if (current >= end) {
-                    element.textContent = end + suffix
-                    clearInterval(timer)
-                } else {
-                    element.textContent = Math.floor(current) + suffix
-                }
-            }, 16)
-        }
-
-        // Display Books
-        function displayBooks(books) {
-            const grid = document.getElementById('productsGrid')
-
-            if (books.length === 0) {
-                grid.innerHTML = `
-                    <div class="empty-state">
-                        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
-                        </svg>
-                        <h3>No Listings Found</h3>
-                        <p>Be the first to list your study materials!</p>
-                    </div>
-                `
-                return
-            }
-
-            grid.innerHTML = books.map(book => {
-                const initials = book.seller ? book.seller.substring(0, 2).toUpperCase() : 'UN'
-
-                return `
-                    <div class="product-card">
-                        <div class="product-image">
-                            <img src="${book.image || 'https://via.placeholder.com/280x200?text=No+Image'}" alt="${book.title}" onerror="this.src='https://via.placeholder.com/280x200?text=No+Image'">
-                            <div class="price-badge">₹${book.price}</div>
-                        </div>
-                        <div class="product-content">
-                            <div class="product-title">${book.title}</div>
-                            <div class="product-meta">
-                                <div class="meta-item">
-                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"/>
-                                    </svg>
-                                    Sem ${book.semester || 'N/A'}
-                                </div>
-                            </div>
-                            <div class="product-footer">
-                                <div class="seller-info">
-                                    <div class="avatar">${initials}</div>
-                                    <div class="seller-name">${book.seller || 'Unknown'}</div>
-                                </div>
-                                <div class="category-badge">${book.category || 'Other'}</div>
-                            </div>
-                        </div>
-                    </div>
-                `
-            }).join('')
-        }
-
-        // Search Books
-        async function searchBooks() {
-            const query = document.getElementById('searchInput').value.trim()
-
-            if (!query) {
-                loadBooks()
-                return
-            }
-
             try {
                 const { data, error } = await supabaseClient
                     .from('books')
                     .select('*')
-                    .ilike('title', `%${query}%`)
+                    .order('created_at', { ascending: false });
 
-                if (error) throw error
-                displayBooks(data)
-            } catch (error) {
-                console.error('Error searching:', error)
+                if (error) throw error;
+                allBooks = data || [];
+                renderMarket(allBooks);
+            } catch (err) {
+                showError('Failed to synchronize with marketplace.');
             }
         }
 
-        // Filter Books
-        async function filterBooks() {
-            const category = document.getElementById('categoryFilter').value
-            const semester = document.getElementById('semesterFilter').value
-            const sort = document.getElementById('sortFilter').value
-
-            try {
-                let query = supabaseClient.from('books').select('*')
-
-                if (category) query = query.eq('category', category)
-                if (semester) query = query.eq('semester', semester)
-
-                if (sort === 'price_low') {
-                    query = query.order('price', { ascending: true })
-                } else if (sort === 'price_high') {
-                    query = query.order('price', { ascending: false })
-                } else {
-                    query = query.order('created_at', { ascending: false })
-                }
-
-                const { data, error } = await query
-                if (error) throw error
-                displayBooks(data)
-            } catch (error) {
-                console.error('Error filtering:', error)
+        // Pro Rendering Engine
+        function renderMarket(books) {
+            const grid = document.getElementById('marketGrid');
+            if (books.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg>
+                        <h3 style="font-weight: 800; font-size: 1.25rem;">No Books Found</h3>
+                        <p style="color: var(--text-muted);">Adjust your search or be the first to list a book!</p>
+                    </div>`;
+                return;
             }
+
+            grid.innerHTML = books.map(book => createBookCard(book, false)).join('');
+        }
+
+        function renderShelf() {
+            const grid = document.getElementById('shelfGrid');
+            const myBooks = allBooks.filter(b => b.seller_id === currentUserId || b.seller === 'You'); // Mock logic
+
+            if (myBooks.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <svg class="empty-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/></svg>
+                        <h3 style="font-weight: 800; font-size: 1.25rem;">Your Shelf is Empty</h3>
+                        <p style="color: var(--text-muted);">List your first book to start swapping!</p>
+                    </div>`;
+                return;
+            }
+            grid.innerHTML = myBooks.map(book => createBookCard(book, true)).join('');
+        }
+
+        function createBookCard(book, isOwner) {
+            const initials = book.seller ? book.seller.substring(0, 2).toUpperCase() : 'BU';
+            return `
+                <div class="book-card">
+                    <div class="book-cover">
+                        <img src="${book.image || 'https://images.unsplash.com/photo-1544640808-32ca72ac7f37?auto=format&fit=crop&w=400'}" 
+                             style="width: 100%; height: 100%; object-fit: cover; opacity: 0.8;"
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';">
+                        <i class="fas fa-book" style="display: none; font-size: 1.5rem; color: var(--slate-300);">📚</i>
+                        <span class="badge-status status-available">Available</span>
+                    </div>
+                    <div class="book-content">
+                        <div class="book-title">${book.title}</div>
+                        <div class="book-meta">
+                            <span>₹${book.price || 'Fair Swap'}</span>
+                            <span>•</span>
+                            <span>${book.category || 'Academic'}</span>
+                        </div>
+                        <div class="book-owner">
+                            <div class="owner-avatar">${initials}</div>
+                            <div class="owner-info">
+                                <span class="owner-name">${book.seller || 'Member'}</span>
+                                <span class="owner-college">Campus Mitra User</span>
+                            </div>
+                            ${!isOwner ? `
+                                <button class="btn-action btn-primary" onclick="requestSwap('${book.id}')" style="padding: 8px 12px; font-size: 0.75rem;">
+                                    Request
+                                </button>
+                            ` : `
+                                <button class="btn-action btn-secondary" onclick="editBook('${book.id}')" style="padding: 8px 12px; font-size: 0.75rem;">
+                                    Manage
+                                </button>
+                            `}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderSwaps() {
+            // Simplified lists for now
+            document.getElementById('incomingSwaps').innerHTML = '<div class="empty-state" style="padding: 20px;"><p style="font-size: 0.875rem; color: var(--text-muted);">No incoming requests yet.</p></div>';
+            document.getElementById('outgoingSwaps').innerHTML = '<div class="empty-state" style="padding: 20px;"><p style="font-size: 0.875rem; color: var(--text-muted);">You haven\'t made any requests.</p></div>';
+        }
+
+        // Alerts
+        function showError(msg) {
+            const box = document.getElementById('alertBox');
+            box.style.display = 'flex';
+            box.className = 'alert error-alert';
+            document.getElementById('alertTitle').textContent = '⚠️ System Error';
+            document.getElementById('alertMessage').textContent = msg;
+            setTimeout(() => box.style.display = 'none', 5000);
+        }
+
+        function showSuccess(msg) {
+            const box = document.getElementById('alertBox');
+            box.style.display = 'flex';
+            box.className = 'alert success-alert';
+            document.getElementById('alertTitle').textContent = '✨ Success';
+            document.getElementById('alertMessage').textContent = msg;
+            setTimeout(() => box.style.display = 'none', 5000);
+        }
+
+        // Actions
+        async function requestSwap(bookId) {
+            showSuccess('Swap request sent! You will be notified when the owner responds.');
+        }
+
+        function openAddModal() {
+            showError('Listing Modal integration in progress.');
         }
 
         // Initialize
-        window.addEventListener('DOMContentLoaded', loadBooks)
-
-        // Search on Enter
-        document.getElementById('searchInput').addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') searchBooks()
-        })
+        window.addEventListener('DOMContentLoaded', loadBooks);
     </script>
 </body>
 

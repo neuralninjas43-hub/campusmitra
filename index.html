@@ -122,9 +122,10 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 30px 0;
-            margin-bottom: 40px;
+            padding: 40px 0;
+            margin-bottom: 48px;
             animation: slideDown 0.8s ease-out;
+            position: relative;
         }
 
         @keyframes slideDown {
@@ -142,50 +143,107 @@
         .brand-section {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 24px;
         }
 
         .logo {
-            width: 70px;
-            height: 70px;
-            border-radius: 16px;
+            width: 80px;
+            height: 80px;
+            border-radius: 20px;
             overflow: hidden;
-            box-shadow: var(--shadow-lg);
-            transition: all 0.3s ease;
+            box-shadow: var(--shadow-xl);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             background: white;
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 3px solid transparent;
-            background-image: linear-gradient(white, white), var(--gradient-purple);
+            border: 4px solid transparent;
+            background-image: linear-gradient(white, white), linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #06B6D4 100%);
             background-origin: border-box;
             background-clip: padding-box, border-box;
+            position: relative;
+        }
+
+        .logo::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 20px;
+            padding: 4px;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6, #06B6D4);
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .logo:hover::after {
+            opacity: 1;
         }
 
         .logo:hover {
-            transform: translateY(-3px) scale(1.05);
-            box-shadow: var(--shadow-xl);
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.4);
         }
 
         .logo img {
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 16px;
+        }
+
+        .brand {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
         }
 
         .brand h1 {
-            font-family: 'DM Serif Display', serif;
-            font-size: 2.5rem;
-            color: var(--text-primary);
-            margin-bottom: 5px;
-            letter-spacing: -0.5px;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 0;
+            letter-spacing: -1.5px;
+            background: linear-gradient(135deg, #6366F1 0%, #8B5CF6 50%, #06B6D4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            position: relative;
+            line-height: 1;
+        }
+
+        .brand-tagline {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, rgba(99, 102, 241, 0.1) 0%, rgba(139, 92, 246, 0.1) 100%);
+            padding: 6px 16px;
+            border-radius: 20px;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            width: fit-content;
+        }
+
+        .brand-tagline-icon {
+            width: 16px;
+            height: 16px;
+            background: linear-gradient(135deg, #6366F1, #8B5CF6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 10px;
             font-weight: 700;
         }
 
-        .brand p {
-            color: var(--text-secondary);
-            font-size: 1rem;
-            font-weight: 500;
+        .brand-tagline-text {
+            color: var(--text-primary);
+            font-size: 0.875rem;
+            font-weight: 600;
+            letter-spacing: 0.3px;
         }
 
         .login-btn {
@@ -470,6 +528,14 @@
             bottom: 30px;
             right: 30px;
             z-index: 1000;
+            pointer-events: none;
+            /* Add this to prevent blocking clicks */
+        }
+
+        .chatbot-button,
+        .chat-window {
+            pointer-events: auto;
+            /* Ensure children still receive clicks */
         }
 
         .chatbot-button {
@@ -1004,7 +1070,10 @@
                 </div>
                 <div class="brand">
                     <h1>Campus Mitra</h1>
-                    <p>Your all-in-one platform for student life</p>
+                    <div class="brand-tagline">
+                        <div class="brand-tagline-icon">✦</div>
+                        <span class="brand-tagline-text">All-in-One Student Life Platform</span>
+                    </div>
                 </div>
             </div>
             <a href="auth.html" id="loginBtnLink">
@@ -1046,7 +1115,7 @@
                 </div>
                 <div class="module-content">
                     <div class="module-title">BookLoop</div>
-                    <div class="module-description">Buy & sell academic books and notes easily.</div>
+                    <div class="module-description">Buy & sell study materials easily within your campus.</div>
                 </div>
             </a>
 
@@ -1062,7 +1131,7 @@
             </a>
 
             <!-- AcadTrack -->
-            <a href="acadtrack_complete (1).html" class="module-card">
+            <a href="acadtrack_complete%20(1).html" class="module-card">
                 <div class="module-icon">
                     <img src="acadtrack.JPG" alt="AcadTrack">
                 </div>
@@ -1423,7 +1492,7 @@
     <script>
         // Gemini API Configuration
         const GEMINI_API_KEY = 'AIzaSyCJj8PkU8NMw0qdkPcTPMgmRvHgIQusyq4';
-        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`;
+        const GEMINI_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent`;
 
         // DOM Elements
         const chatbotToggle = document.getElementById('chatbotToggle');
@@ -1472,7 +1541,7 @@
 
             try {
                 // Call Gemini API
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent`, {
+                const response = await fetch(GEMINI_API_URL, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
