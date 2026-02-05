@@ -1017,52 +1017,13 @@
                 hasEnhancedColumns = !colError
 
                 if (!hasMessagesTable || !hasEnhancedColumns) {
-                    showSetupBanner()
+                    console.log('⚠️ Limited marketplace functionality: tables missing.');
                 }
 
                 console.log('📊 Database check:', { hasMessagesTable, hasEnhancedColumns })
             } catch (error) {
                 console.log('Database check skipped')
             }
-        }
-
-        function showSetupBanner() {
-            document.getElementById('setupBanner').style.display = 'block'
-        }
-
-        function dismissSetupBanner() {
-            document.getElementById('setupBanner').style.display = 'none'
-            localStorage.setItem('bookloopSetupDismissed', 'true')
-        }
-
-        function showSetupInstructions() {
-            alert(`
-DATABASE SETUP GUIDE
-====================
-
-STEP 1: Update Books Table
-1. Go to Supabase Dashboard → Table Editor → books table
-2. Click "Add Column" and add these columns one by one:
-   - meeting_venue (type: text)
-   - buyer_approved (type: bool, default: false)
-   - seller_approved (type: bool, default: false)
-   - deal_completed (type: bool, default: false)
-   - seller_id (type: text)
-
-STEP 2: Create Messages Table
-1. Click "New Table" → Name it "messages"
-2. Add these columns:
-   - id (type: int8, auto-increment, primary key)
-   - book_id (type: int8)
-   - sender_id (type: text)
-   - sender_name (type: text)
-   - message (type: text)
-   - created_at (type: timestamptz, default: now())
-
-STEP 3: Refresh this page
-
-That's it! All features will work after this setup.
-            `)
         }
 
         // ==========================================
@@ -1105,17 +1066,19 @@ That's it! All features will work after this setup.
 
             if (books.length === 0) {
                 grid.innerHTML = `
-                    <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
-                        <p>No books available. Add some in your Supabase books table!</p>
-                    </div>
-                `
+            <div style="text-align: center; padding: 40px; grid-column: 1/-1;">
+                <p>No books available. Add some in your Supabase books table!</p>
+            </div>
+            `
                 return
             }
 
-            grid.innerHTML = books.map(book => {
-                const isSeller = currentUser === (book.seller_id || book.seller);
-                return `
-                <div class="product-card" onclick="openProductDetail(${book.id})">
+            grid.innerHTML = books
+                .filter(book => book.id !== 1 && book.id !== '1') // Filter out specific book ID if requested
+                .map(book => {
+                    const isSeller = currentUser === (book.seller_id || book.seller);
+                    return `
+            <div class="product-card" onclick="openProductDetail(${book.id})">
                     <div class="product-image">
                         <img src="${book.image || 'https://via.placeholder.com/260x200?text=No+Image'}" alt="${book.title}">
                     </div>
@@ -1136,9 +1099,9 @@ That's it! All features will work after this setup.
                             ${book.seller || 'Anonymous'}${book.semester ? ', Sem ' + book.semester : ''}
                         </div>
                     </div>
-                </div>
-                `;
-            }).join('');
+                </div >
+            `;
+                }).join('');
         }
 
         // ==========================================
@@ -1191,45 +1154,45 @@ That's it! All features will work after this setup.
             const selectedVenue = book.meeting_venue || '';
 
             document.getElementById('productDetail').innerHTML = `
-                <div>
-                    <div class="detail-image">
-                        <img src="${book.image || 'https://via.placeholder.com/400?text=No+Image'}" alt="${book.title}">
-                    </div>
+            <div>
+            <div class="detail-image">
+                <img src="${book.image || 'https://via.placeholder.com/400?text=No+Image'}" alt="${book.title}">
+            </div>
                 </div>
-                
-                <div class="detail-info">
-                    <h2>${book.title}</h2>
-                    <div class="detail-price">₹${book.price}</div>
-                    
-                    <div class="detail-meta">
-                        <div class="meta-item">
-                            <span class="meta-label">Category</span>
-                            <span class="meta-value">${book.category || 'N/A'}</span>
-                        </div>
-                        <div class="meta-item">
-                            <span class="meta-label">Semester</span>
-                            <span class="meta-value">${book.semester ? 'Semester ' + book.semester : 'N/A'}</span>
-                        </div>
-                        ${book.condition ? `
+
+            <div class="detail-info">
+                <h2>${book.title}</h2>
+                <div class="detail-price">₹${book.price}</div>
+
+                <div class="detail-meta">
+                    <div class="meta-item">
+                        <span class="meta-label">Category</span>
+                        <span class="meta-value">${book.category || 'N/A'}</span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Semester</span>
+                        <span class="meta-value">${book.semester ? 'Semester ' + book.semester : 'N/A'}</span>
+                    </div>
+                    ${book.condition ? `
                         <div class="meta-item">
                             <span class="meta-label">Condition</span>
                             <span class="meta-value">${book.condition}</span>
                         </div>
                         ` : ''}
-                        <div class="meta-item">
-                            <span class="meta-label">Seller</span>
-                            <span class="meta-value">${book.seller || 'Anonymous'}</span>
-                        </div>
+                    <div class="meta-item">
+                        <span class="meta-label">Seller</span>
+                        <span class="meta-value">${book.seller || 'Anonymous'}</span>
                     </div>
+                </div>
 
-                    ${book.description ? `
+                ${book.description ? `
                         <div class="detail-description">
                             <h3>Description</h3>
                             <p>${book.description}</p>
                         </div>
                     ` : ''}
 
-                    ${hasEnhancedColumns ? `
+                ${hasEnhancedColumns ? `
                     <!-- Venue Selection -->
                     <div class="venue-section">
                         <h3>📍 Select Meeting Venue</h3>
@@ -1262,7 +1225,7 @@ That's it! All features will work after this setup.
                         ${selectedVenue ? `<p style="margin-top: 15px; text-align: center; color: var(--accent-green); font-weight: 600;">✓ Venue: ${selectedVenue}</p>` : ''}
                     </div>
                     ` : '<p style="background: #fff3e0; padding: 15px; border-radius: 8px; color: #666;">💡 Venue selection will be available after database setup</p>'}
-                </div>
+            </div>
 
                 ${hasMessagesTable ? `
                 <!-- Chat Section -->
@@ -1332,7 +1295,7 @@ That's it! All features will work after this setup.
                     </p>
                 </div>
                 `}
-            `
+        `
         }
 
         // ==========================================
@@ -1351,12 +1314,12 @@ That's it! All features will work after this setup.
                 })
 
                 return `
-                    <div class="message ${isMyMessage ? 'my-message' : ''}">
+            <div class="message ${isMyMessage ? 'my-message' : ''}">
                         <div class="message-sender">${isMyMessage ? 'You' : msg.sender_name || 'Other User'}</div>
                         <div class="message-text">${msg.message}</div>
                         <div class="message-timestamp">${timestamp}</div>
                     </div>
-                `
+            `
             }).join('')
         }
 
@@ -1449,7 +1412,7 @@ That's it! All features will work after this setup.
 
                 const confirmMsg = document.createElement('p')
                 confirmMsg.style.cssText = 'margin-top: 15px; text-align: center; color: var(--accent-green); font-weight: 600;'
-                confirmMsg.textContent = `✓ Venue: ${venue}`
+                confirmMsg.textContent = `✓ Venue: ${venue} `
                 venueSection.appendChild(confirmMsg)
             } catch (error) {
                 console.error('Error setting venue:', error)
@@ -1515,7 +1478,7 @@ That's it! All features will work after this setup.
                 let searchQuery = supabase
                     .from('books')
                     .select('*')
-                    .ilike('title', `%${query}%`)
+                    .ilike('title', `% ${query}% `)
 
                 if (hasEnhancedColumns) {
                     searchQuery = searchQuery.or('deal_completed.is.null,deal_completed.eq.false')
@@ -1599,7 +1562,7 @@ That's it! All features will work after this setup.
         function showAlert(title, msg, type = 'success') {
             const box = document.getElementById('alertBox');
             box.style.display = 'block';
-            box.className = `alert alert-${type}`;
+            box.className = `alert alert - ${type}`;
             document.getElementById('alertTitle').textContent = title;
             document.getElementById('alertMessage').textContent = msg;
 
